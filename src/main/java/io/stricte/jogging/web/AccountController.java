@@ -23,6 +23,8 @@ public class AccountController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .contentType(MediaType.APPLICATION_JSON_UTF8)
+            .build();
     }
 }
