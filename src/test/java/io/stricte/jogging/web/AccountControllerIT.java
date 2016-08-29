@@ -1,7 +1,9 @@
 package io.stricte.jogging.web;
 
+import io.stricte.jogging.repository.UserRepository;
 import io.stricte.jogging.util.TestUtils;
-import io.stricte.jogging.web.rest.model.UserRest;
+import io.stricte.jogging.web.rest.model.UserDto;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,20 +31,28 @@ public class AccountControllerIT {
 
     private MockMvc mockMvc;
 
+    @Autowired
+    UserRepository userRepository;
+
     @Before
     public void setup() {
-        this.mockMvc = MockMvcBuilders
+        mockMvc = MockMvcBuilders
             .webAppContextSetup(this.wac)
             .apply(springSecurity())
             .build();
     }
 
+    @After
+    public void cleanup() {
+        userRepository.deleteAll();
+    }
+
     @Test
     public void testRegisterInvalidEmail() throws Exception {
 
-        final UserRest user = new UserRest("test", "some-good-random-pass");
+        final UserDto user = new UserDto("test", "some-good-random-pass");
 
-        this.mockMvc.perform(
+        mockMvc.perform(
             post("/account/register")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -49,14 +60,16 @@ public class AccountControllerIT {
                 .content(TestUtils.convertObjectToJsonBytes(user))
         )
             .andExpect(status().is4xxClientError());
+
+        assertThat(userRepository.findAll()).isEmpty();
     }
 
     @Test
     public void testInvalidPassword() throws Exception {
 
-        final UserRest user = new UserRest("test@jogging.com", "pass");
+        final UserDto user = new UserDto("test@jogging.com", "pass");
 
-        this.mockMvc.perform(
+        mockMvc.perform(
             post("/account/register")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -64,14 +77,16 @@ public class AccountControllerIT {
                 .content(TestUtils.convertObjectToJsonBytes(user))
         )
             .andExpect(status().is4xxClientError());
+
+        assertThat(userRepository.findAll()).isEmpty();
     }
 
     @Test
     public void testRegisterValidData() throws Exception {
 
-        final UserRest user = new UserRest("test@jogging.com", "some-good-random-pass");
+        final UserDto user = new UserDto("test@jogging.com", "some-good-random-pass");
 
-        this.mockMvc.perform(
+        mockMvc.perform(
             post("/account/register")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -81,5 +96,22 @@ public class AccountControllerIT {
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
+        assertThat(userRepository.findAll()).hasSize(1);
+    }
+
+    @Test
+    public void testLoginNonExisting() throws Exception {
+
+        final UserDto user = new UserDto("test@jogging.com", "some-good-random-pass");
+
+        mockMvc.perform(
+            post("/account/login")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(TestUtils.convertObjectToJsonBytes(user))
+        )
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 }

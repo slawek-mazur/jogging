@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
-public class UserRest {
+public class UserDto {
 
     @Email
     @Size(max = 100)

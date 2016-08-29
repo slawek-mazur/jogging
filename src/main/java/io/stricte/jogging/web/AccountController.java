@@ -1,6 +1,7 @@
 package io.stricte.jogging.web;
 
-import io.stricte.jogging.web.rest.model.UserRest;
+import io.stricte.jogging.service.UserService;
+import io.stricte.jogging.web.rest.model.UserDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,20 @@ import javax.validation.Valid;
 @RequestMapping("/account")
 public class AccountController {
 
+    private final UserService userService;
+
+    public AccountController(UserService userService) {
+        this.userService = userService;
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> register(@Valid @RequestBody UserRest userRest, BindingResult bindingResult) {
+    public ResponseEntity<?> register(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
+
+        userService.registerUser(userDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
             .contentType(MediaType.APPLICATION_JSON_UTF8)
