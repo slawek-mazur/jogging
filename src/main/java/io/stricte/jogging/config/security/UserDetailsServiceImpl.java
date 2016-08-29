@@ -3,7 +3,6 @@ package io.stricte.jogging.config.security;
 import io.stricte.jogging.domain.User;
 import io.stricte.jogging.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,7 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        final User user = userRepository.findByUserName(username);
+        final User user = userRepository.findByLogin(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("User " + username + " doesn't exists or isn't active");

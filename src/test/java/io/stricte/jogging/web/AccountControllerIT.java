@@ -11,8 +11,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,10 +36,11 @@ public class AccountControllerIT {
 
     @Test
     public void testRegisterValidData() throws Exception {
-        this.mockMvc.perform(get("/account/register")
+        this.mockMvc.perform(post("/account/register")
+            .with(csrf())
             .accept(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk())
-            .andExpect(content().contentType("application/json"));
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
     }
 }
