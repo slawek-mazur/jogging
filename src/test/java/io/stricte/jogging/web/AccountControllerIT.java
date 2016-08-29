@@ -1,5 +1,7 @@
 package io.stricte.jogging.web;
 
+import io.stricte.jogging.util.TestUtils;
+import io.stricte.jogging.web.rest.model.UserRest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,9 +38,18 @@ public class AccountControllerIT {
 
     @Test
     public void testRegisterValidData() throws Exception {
-        this.mockMvc.perform(post("/account/register")
-            .with(csrf())
-            .accept(MediaType.APPLICATION_JSON_UTF8))
+
+        final UserRest user = UserRest.builder()
+            .email("test@jogging.com")
+            .password("pass")
+            .build();
+
+        this.mockMvc.perform(
+            post("/account/register")
+                .with(csrf())
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(TestUtils.convertObjectToJsonBytes(user))
+        )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
