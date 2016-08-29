@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Set;
@@ -19,12 +18,12 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
 
-    @NotNull
-    @Pattern(regexp = "^[a-z0-9\\-]{2,}$", flags = Pattern.Flag.CASE_INSENSITIVE)
-    @Column(length = 100, unique = true, nullable = false)
-    private String login;
+    @Email
+    @Size(max = 100)
+    @Column(length = 100, unique = true)
+    private String email;
 
     @NotNull
     @Size(min = 10, max = 60)
@@ -38,11 +37,6 @@ public class User implements Serializable {
     @Size(max = 50)
     @Column(name = "last_name", length = 50)
     private String lastName;
-
-    @Email
-    @Size(max = 100)
-    @Column(length = 100, unique = true)
-    private String email;
 
     @NotNull
     @Column(nullable = false)

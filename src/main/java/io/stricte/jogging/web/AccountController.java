@@ -20,7 +20,7 @@ public class AccountController {
     public ResponseEntity<?> register(@Valid @RequestBody UserRest userRest, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).build();

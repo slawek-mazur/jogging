@@ -37,6 +37,22 @@ public class AccountControllerIT {
     }
 
     @Test
+    public void testRegisterInvalidEmail() throws Exception {
+
+        final UserRest user = new UserRest("test", "pass");
+
+        this.mockMvc.perform(
+            post("/account/register")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(TestUtils.convertObjectToJsonBytes(user))
+        )
+            .andExpect(status().is4xxClientError())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+    }
+
+    @Test
     public void testRegisterValidData() throws Exception {
 
         final UserRest user = new UserRest("test@jogging.com", "pass");
