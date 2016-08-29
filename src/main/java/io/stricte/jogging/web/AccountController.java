@@ -31,7 +31,7 @@ public class AccountController {
             return ResponseEntity.badRequest().build();
         }
 
-        userService.registerUser(userDto);
+        userService.register(userDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
             .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -41,7 +41,7 @@ public class AccountController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> login(@RequestBody UserDto userDto) {
 
-        return Optional.ofNullable(userService.lookup(userDto))
+        return Optional.ofNullable(userService.login(userDto))
             .map(u -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).build())
             .orElse(ResponseEntity.notFound().build());
     }

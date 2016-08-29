@@ -109,7 +109,7 @@ public class AccountControllerIT {
 
         final UserDto loginUser = new UserDto("test@jogging.com", "some-good-random-pass");
 
-        userService.registerUser(new UserDto("test@jogging.pl", "some-good-random-pass"));
+        userService.register(new UserDto("test@jogging.pl", "some-good-random-pass"));
 
         mockMvc.perform(
             post("/account/login")
@@ -126,7 +126,7 @@ public class AccountControllerIT {
 
         final UserDto user = new UserDto("test@jogging.com", "some-good-random-pass");
 
-        userService.registerUser(user);
+        userService.register(user);
 
         mockMvc.perform(
             post("/account/login")

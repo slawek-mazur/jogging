@@ -5,7 +5,7 @@ import io.stricte.jogging.web.rest.model.UserDto;
 
 public interface UserService {
 
-    User registerUser(UserDto userDto);
+    User register(UserDto userDto);
 
-    User lookup(UserDto userDto);
+    User login(UserDto userDto);
 }

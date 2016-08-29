@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerUser(UserDto userDto) {
+    public User register(UserDto userDto) {
         final User user = new User();
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User lookup(UserDto userDto) {
+    public User login(UserDto userDto) {
         final User user = userRepository.findByEmail(userDto.getEmail());
 
         return Optional.ofNullable(user)

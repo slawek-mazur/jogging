@@ -26,7 +26,7 @@ public class UserServiceTest {
 
     @Test
     public void registerUser() throws Exception {
-        userService.registerUser(new UserDto("test", "pass"));
+        userService.register(new UserDto("test", "pass"));
 
         verify(userRepository).save(any(User.class));
     }
