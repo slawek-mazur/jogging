@@ -1,13 +1,13 @@
 package io.stricte.jogging.web.rest.model;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@Builder
+@AllArgsConstructor
 public class UserRest {
 
-    private final String email;
+    private String email;
 
-    private final String password;
+    private String password;
 }

@@ -39,18 +39,16 @@ public class AccountControllerIT {
     @Test
     public void testRegisterValidData() throws Exception {
 
-        final UserRest user = UserRest.builder()
-            .email("test@jogging.com")
-            .password("pass")
-            .build();
+        final UserRest user = new UserRest("test@jogging.com", "pass");
 
         this.mockMvc.perform(
             post("/account/register")
                 .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(TestUtils.convertObjectToJsonBytes(user))
         )
-            .andExpect(status().isOk())
+            .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
     }
