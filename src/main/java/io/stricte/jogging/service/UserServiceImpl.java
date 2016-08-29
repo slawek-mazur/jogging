@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -26,5 +28,14 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public User lookup(UserDto userDto) {
+        final User user = userRepository.findByEmail(userDto.getEmail());
+
+        return Optional.ofNullable(user)
+            .filter(u -> passwordEncoder.matches(userDto.getPassword(), user.getPassword()))
+            .orElse(null);
     }
 }

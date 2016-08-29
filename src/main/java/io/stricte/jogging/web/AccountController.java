@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/account")
@@ -35,5 +36,13 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.CREATED)
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .build();
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> login(@RequestBody UserDto userDto) {
+
+        return Optional.ofNullable(userService.lookup(userDto))
+            .map(u -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).build())
+            .orElse(ResponseEntity.notFound().build());
     }
 }
