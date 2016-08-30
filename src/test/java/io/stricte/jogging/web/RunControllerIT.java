@@ -58,18 +58,18 @@ public class RunControllerIT {
             .webAppContextSetup(this.wac)
             .apply(springSecurity())
             .build();
-    }
-
-    @After
-    public void cleanup() {
-        userRepository.deleteAll();
-        runRepository.deleteAll();
 
         final User user = new User();
         user.setEmail(EMAIL);
         user.setPassword(passwordEncoder.encode("pass"));
 
         userRepository.save(user);
+    }
+
+    @After
+    public void cleanup() {
+        userRepository.deleteAll();
+        runRepository.deleteAll();
     }
 
     @Test
@@ -112,16 +112,19 @@ public class RunControllerIT {
         final LocalDateTime now = LocalDateTime.now();
 
         final Run run1 = new Run();
+        run1.setUser(user);
         run1.setDistance(Distance.ofMeters(1500));
         run1.setDuration(Duration.ofMinutes(25));
         run1.setDay(now.minusDays(3));
 
         final Run run2 = new Run();
+        run2.setUser(user);
         run2.setDistance(Distance.ofMeters(2500));
         run2.setDuration(Duration.ofMinutes(75));
         run2.setDay(now.minusDays(2));
 
         final Run run3 = new Run();
+        run3.setUser(user);
         run3.setDistance(Distance.ofMeters(7500));
         run3.setDuration(Duration.ofMinutes(135));
         run3.setDay(now.minusDays(1));
