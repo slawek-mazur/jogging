@@ -1,11 +1,12 @@
 package io.stricte.jogging.service;
 
 import io.stricte.jogging.domain.Run;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.security.Principal;
-import java.util.Collection;
 
 public interface RunService {
-    
-    Collection<Run> getRunsForPrincipal(Principal principal);
+
+    Page<Run> getRunsForPrincipal(Principal principal, Pageable pageable);
 }

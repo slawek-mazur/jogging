@@ -28,6 +28,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -132,12 +133,16 @@ public class RunControllerIT {
         runRepository.save(Sets.newHashSet(run1, run2, run3));
 
         mockMvc.perform(
-            get("/runs")
+            get("/runs?sort=day,desc")
                 .with(user("joe").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
             .andExpect(status().isOk())
-            .andDo(print());
+            .andDo(print())
+            .andExpect(jsonPath("$.length()").value(3))
+            .andExpect(jsonPath("$[0].duration.minutes").value(135))
+            .andExpect(jsonPath("$[1].duration.minutes").value(75))
+            .andExpect(jsonPath("$[2].duration.minutes").value(25));
     }
 }

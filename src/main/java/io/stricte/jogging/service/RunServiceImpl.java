@@ -3,10 +3,11 @@ package io.stricte.jogging.service;
 import io.stricte.jogging.domain.Run;
 import io.stricte.jogging.repository.RunRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Collection;
 
 @Service
 public class RunServiceImpl implements RunService {
@@ -18,7 +19,7 @@ public class RunServiceImpl implements RunService {
         this.runRepository = runRepository;
     }
 
-    public Collection<Run> getRunsForPrincipal(Principal principal) {
-        return runRepository.findAll();
+    public Page<Run> getRunsForPrincipal(Principal principal, Pageable pageable) {
+        return runRepository.findAll(pageable);
     }
 }
