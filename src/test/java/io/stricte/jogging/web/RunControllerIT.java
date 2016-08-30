@@ -17,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -50,7 +51,7 @@ public class RunControllerIT {
     @Test
     public void testRedirectIfNotLoggedIn() throws Exception {
         mockMvc.perform(
-            get("/run")
+            get("/runs")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
@@ -60,7 +61,7 @@ public class RunControllerIT {
     @Test
     public void testListAsUser() throws Exception {
         mockMvc.perform(
-            get("/run")
+            get("/runs")
                 .with(user("joe").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -71,11 +72,23 @@ public class RunControllerIT {
     @Test
     public void testListAsAdmin() throws Exception {
         mockMvc.perform(
-            get("/run")
+            get("/runs")
                 .with(user("joe").roles("ADMIN"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
             .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testRunsExists() throws Exception {
+        mockMvc.perform(
+            get("/runs")
+                .with(user("joe").password("pass").roles("USER"))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+            .andExpect(status().isOk())
+            .andExpect(content().json(""));
     }
 }
