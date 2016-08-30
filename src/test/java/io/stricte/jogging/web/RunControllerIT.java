@@ -89,6 +89,6 @@ public class RunControllerIT {
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
             .andExpect(status().isOk())
-            .andExpect(content().json(""));
+            .andExpect(content().json("[]"));
     }
 }

@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .expressionHandler(expressionHandler)
                     .antMatchers(
-                        "/run/**",
+                        "/runs/**",
                         "/admin/**",
                         "/management/**"
                     ).authenticated()
