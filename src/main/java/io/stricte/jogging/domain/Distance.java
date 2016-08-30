@@ -1,7 +1,12 @@
 package io.stricte.jogging.domain;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.io.Serializable;
 
+@ToString(of = "meters")
+@EqualsAndHashCode(of = "meters")
 public class Distance implements Serializable {
 
     private static final Distance ZERO = new Distance(0);

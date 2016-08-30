@@ -68,8 +68,8 @@ public class RunControllerIT {
 
     @After
     public void cleanup() {
-        userRepository.deleteAll();
         runRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test

@@ -1,7 +1,10 @@
 package io.stricte.jogging.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.common.collect.Sets;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
@@ -12,6 +15,8 @@ import java.util.Set;
 
 @Data
 @Entity
+@EqualsAndHashCode(of = "email")
+@ToString(of = { "email", "firstName", "lastName" })
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,5 +48,6 @@ public class User implements Serializable {
     private boolean activated = false;
 
     @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JsonManagedReference
     private Set<Run> runs = Sets.newHashSet();
 }
