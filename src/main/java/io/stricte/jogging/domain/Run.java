@@ -3,7 +3,6 @@ package io.stricte.jogging.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Duration;
@@ -24,12 +23,10 @@ public class Run implements Serializable {
     private LocalDateTime day;
 
     @NotNull
-    @Min(value = 1)
     @Column(name = "distance", nullable = false)
     private Distance distance;
 
     @NotNull
-    @Min(value = 1)
     @Column(name = "duration", nullable = false)
     private Duration duration;
 

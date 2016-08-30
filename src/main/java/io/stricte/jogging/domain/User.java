@@ -3,7 +3,6 @@ package io.stricte.jogging.domain;
 import com.google.common.collect.Sets;
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -43,7 +42,6 @@ public class User implements Serializable {
     @Column(nullable = false)
     private boolean activated = false;
 
-    @NotEmpty
     @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private Set<Run> runs = Sets.newHashSet();
 }

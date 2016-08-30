@@ -1,5 +1,6 @@
 package io.stricte.jogging.web;
 
+import com.google.common.collect.Sets;
 import io.stricte.jogging.domain.Distance;
 import io.stricte.jogging.domain.Run;
 import io.stricte.jogging.domain.User;
@@ -13,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -32,6 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RunControllerIT {
 
     private static final String EMAIL = "email@example.com";
+
+    private final PasswordEncoder passwordEncoder = new StandardPasswordEncoder();
 
     @Autowired
     UserRepository userRepository;
@@ -62,7 +67,7 @@ public class RunControllerIT {
 
         final User user = new User();
         user.setEmail(EMAIL);
-        user.setPassword("pass");
+        user.setPassword(passwordEncoder.encode("pass"));
 
         userRepository.save(user);
     }
@@ -121,6 +126,7 @@ public class RunControllerIT {
         run3.setDuration(Duration.ofMinutes(135));
         run3.setDay(now.minusDays(1));
 
+        runRepository.save(Sets.newHashSet(run1, run2, run3));
 
         mockMvc.perform(
             get("/runs")

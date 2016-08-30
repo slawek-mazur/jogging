@@ -1,12 +1,18 @@
 package io.stricte.jogging.domain;
 
-public class Distance {
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.stricte.jogging.domain.util.DistanceSerializer;
 
-    public static final Distance ZERO = new Distance(0);
+import java.io.Serializable;
+
+@JsonSerialize(using = DistanceSerializer.class)
+public class Distance implements Serializable {
+
+    private static final Distance ZERO = new Distance(0);
 
     private final long meters;
 
-    public Distance(long meters) {
+    private Distance(long meters) {
         this.meters = meters;
     }
 
