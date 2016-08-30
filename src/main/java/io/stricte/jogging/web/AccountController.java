@@ -3,6 +3,7 @@ package io.stricte.jogging.web;
 import io.stricte.jogging.domain.User;
 import io.stricte.jogging.service.UserService;
 import io.stricte.jogging.web.rest.model.UserDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -34,7 +35,7 @@ public class AccountController {
         }
 
         if (userService.emailRegistered(userDto.getEmail())) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
         final User registered = userService.register(userDto);
