@@ -7,8 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
-
 @Service
 public class RunServiceImpl implements RunService {
 
@@ -19,7 +17,7 @@ public class RunServiceImpl implements RunService {
         this.runRepository = runRepository;
     }
 
-    public Page<Run> getRunsForPrincipal(Principal principal, Pageable pageable) {
-        return runRepository.findAll(pageable);
+    public Page<Run> currentUserRuns(Pageable pageable) {
+        return runRepository.findByCurrentUser(pageable);
     }
 }

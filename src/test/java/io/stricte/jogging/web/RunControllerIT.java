@@ -134,7 +134,7 @@ public class RunControllerIT {
 
         mockMvc.perform(
             get("/runs?sort=day,desc")
-                .with(user("joe").roles("USER"))
+                .with(user(EMAIL).roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )

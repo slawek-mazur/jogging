@@ -37,7 +37,7 @@ public class RunController {
     public ResponseEntity<Collection<Run>> list(Principal principal, Pageable pageable)
         throws URISyntaxException {
 
-        Page<Run> page = runService.getRunsForPrincipal(principal, pageable);
+        Page<Run> page = runService.currentUserRuns(principal, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/runs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
