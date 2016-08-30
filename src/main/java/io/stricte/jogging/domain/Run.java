@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Data
@@ -25,12 +26,12 @@ public class Run implements Serializable {
     @NotNull
     @Min(value = 1)
     @Column(name = "distance", nullable = false)
-    private Integer distance;
+    private Distance distance;
 
     @NotNull
     @Min(value = 1)
-    @Column(name = "time", nullable = false)
-    private Integer time;
+    @Column(name = "duration", nullable = false)
+    private Duration duration;
 
     @ManyToOne
     @JoinColumn(name = "user")
