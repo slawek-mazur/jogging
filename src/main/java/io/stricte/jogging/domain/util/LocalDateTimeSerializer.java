@@ -17,7 +17,7 @@ public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
         throws IOException {
 
         generator.writeStartObject();
-        generator.writeString(o.format(formatter));
+        generator.writeStringField("date", o.format(formatter));
         generator.writeEndObject();
     }
 }
