@@ -47,8 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .expressionHandler(expressionHandler)
                     .antMatchers(
-                        "/system/**"
-                    ).denyAll()
+                        "/run/**",
+                        "/admin/**",
+                        "/management/**"
+                    ).authenticated()
                     .anyRequest().permitAll()
             .and()
                 .rememberMe()
