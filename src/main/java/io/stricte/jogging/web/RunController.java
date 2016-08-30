@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.net.URISyntaxException;
-import java.security.Principal;
 import java.util.Collection;
 
 import static io.stricte.jogging.config.security.Role.ROLE_USER;
@@ -34,11 +33,11 @@ public class RunController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Collection<Run>> list(Principal principal, Pageable pageable)
+    public ResponseEntity<Collection<Run>> list(Pageable pageable)
         throws URISyntaxException {
 
-        Page<Run> page = runService.currentUserRuns(principal, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/runs");
+        Page<Run> page = runService.currentUserRuns(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/runs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 }
