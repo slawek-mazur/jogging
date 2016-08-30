@@ -8,4 +8,6 @@ public interface UserService {
     User register(UserDto userDto);
 
     User login(UserDto userDto);
+
+    boolean emailRegistered(String email);
 }

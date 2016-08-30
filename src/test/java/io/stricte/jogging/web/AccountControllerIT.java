@@ -105,6 +105,34 @@ public class AccountControllerIT {
     }
 
     @Test
+    public void testRegisterSameEmailTwice() throws Exception {
+
+        final UserDto user = new UserDto("test@jogging.com", "some-good-random-pass");
+
+        mockMvc.perform(
+            post("/account/register")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(TestUtils.convertObjectToJsonBytes(user))
+        )
+            .andExpect(status().isCreated())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+
+        mockMvc.perform(
+            post("/account/register")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(TestUtils.convertObjectToJsonBytes(user))
+        )
+            .andExpect(status().isCreated())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+
+        assertThat(userRepository.findAll()).hasSize(1);
+    }
+
+    @Test
     public void testLoginNonExisting() throws Exception {
 
         final UserDto loginUser = new UserDto("test@jogging.com", "some-good-random-pass");

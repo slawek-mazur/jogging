@@ -1,8 +1,8 @@
 package io.stricte.jogging.web;
 
+import io.stricte.jogging.domain.User;
 import io.stricte.jogging.service.UserService;
 import io.stricte.jogging.web.rest.model.UserDto;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 @RestController
@@ -25,15 +27,19 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> register(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
+    public ResponseEntity<?> register(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) throws URISyntaxException {
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        userService.register(userDto);
+        if (userService.emailRegistered(userDto.getEmail())) {
+            return ResponseEntity.badRequest().build();
+        }
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        final User registered = userService.register(userDto);
+
+        return ResponseEntity.created(new URI("/users/" + registered.getId()))
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .build();
     }
