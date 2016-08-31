@@ -1,10 +1,6 @@
 package io.stricte.jogging.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.stricte.jogging.domain.util.DistanceSerializer;
-import io.stricte.jogging.domain.util.DurationSerializer;
-import io.stricte.jogging.domain.util.LocalDateTimeSerializer;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,17 +21,14 @@ public class Run implements Serializable {
 
     @NotNull
     @Column(name = "day", nullable = false)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime day;
 
     @NotNull
     @Column(name = "distance", nullable = false)
-    @JsonSerialize(using = DistanceSerializer.class)
     private Distance distance;
 
     @NotNull
     @Column(name = "duration", nullable = false)
-    @JsonSerialize(using = DurationSerializer.class)
     private Duration duration;
 
     @ManyToOne

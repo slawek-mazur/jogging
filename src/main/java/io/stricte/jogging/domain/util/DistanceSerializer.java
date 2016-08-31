@@ -9,6 +9,8 @@ import java.io.IOException;
 
 public class DistanceSerializer extends JsonSerializer<Distance> {
 
+    public static final JsonSerializer<Distance> INSTANCE = new DistanceSerializer();
+
     @Override
     public void serialize(Distance o, JsonGenerator generator, SerializerProvider provider)
         throws IOException {
