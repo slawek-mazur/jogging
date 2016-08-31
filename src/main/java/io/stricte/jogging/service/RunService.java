@@ -12,4 +12,6 @@ public interface RunService {
     Run currentUserRun(int id);
 
     Run createRun(RunDto runDto);
+
+    Run updateRun(RunDto runDto);
 }

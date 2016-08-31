@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.time.ZonedDateTime;
 
 @Service
 public class RunServiceImpl implements RunService {
@@ -46,6 +45,19 @@ public class RunServiceImpl implements RunService {
 
         final Run run = new Run();
         run.setUser(user);
+        run.setDay(runDto.getDay());
+        run.setDistance(runDto.getDistance());
+        run.setDuration(runDto.getDuration());
+
+        return runRepository.save(run);
+    }
+
+    @Override
+    @Transactional
+    public Run updateRun(RunDto runDto) {
+
+        //todo i should check if that run belongs to currently logged user
+        final Run run = runRepository.findOne(runDto.getId());
         run.setDay(runDto.getDay());
         run.setDistance(runDto.getDistance());
         run.setDuration(runDto.getDuration());

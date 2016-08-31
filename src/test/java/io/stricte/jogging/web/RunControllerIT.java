@@ -29,8 +29,7 @@ import java.time.LocalDateTime;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -217,7 +216,22 @@ public class RunControllerIT {
     }
 
     @Test
-    public void testCreateRun() throws Exception {
+    public void testCreateRunInvalid() throws Exception {
+        RunDto run = new RunDto(null, Distance.ofMeters(500), Duration.ofMinutes(50));
+
+        mockMvc.perform(
+            post("/runs")
+                .with(user(EMAIL).roles(ROLE))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(TestUtils.convertObjectToJsonBytes(run))
+        )
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testCreateRunValid() throws Exception {
         RunDto run = new RunDto(LocalDateTime.now(), Distance.ofMeters(500), Duration.ofMinutes(50));
 
         mockMvc.perform(
@@ -229,6 +243,46 @@ public class RunControllerIT {
                 .content(TestUtils.convertObjectToJsonBytes(run))
         )
             .andExpect(status().isCreated())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+    }
+
+    @Test
+    public void testUpdateRunNonExisting() throws Exception {
+
+        RunDto run = new RunDto(LocalDateTime.now(), Distance.ofMeters(500), Duration.ofMinutes(50));
+
+        mockMvc.perform(
+            put("/runs")
+                .with(user(EMAIL).roles(ROLE))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(TestUtils.convertObjectToJsonBytes(run))
+        )
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testUpdateRunExisting() throws Exception {
+
+        final Run entity = new Run();
+        entity.setDay(LocalDateTime.now());
+        entity.setDistance(Distance.ofMeters(500));
+        entity.setDuration(Duration.ofMinutes(50));
+
+        final Run saved = runRepository.save(entity);
+
+        RunDto run = new RunDto(saved.getId(), saved.getDay(), Distance.ofMeters(999), saved.getDuration());
+
+        mockMvc.perform(
+            put("/runs")
+                .with(user(EMAIL).roles(ROLE))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(TestUtils.convertObjectToJsonBytes(run))
+        )
+            .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 }

@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class RunDto {
 
+    private int id;
+
     @NotNull
     private LocalDateTime day;
 
@@ -20,4 +22,10 @@ public class RunDto {
 
     @NotNull
     private Duration duration;
+
+    public RunDto(LocalDateTime day, Distance distance, Duration duration) {
+        this.day = day;
+        this.distance = distance;
+        this.duration = duration;
+    }
 }
