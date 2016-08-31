@@ -1,10 +1,9 @@
 package io.stricte.jogging.web;
 
-import io.stricte.jogging.domain.Distance;
 import io.stricte.jogging.domain.User;
 import io.stricte.jogging.repository.UserRepository;
 import io.stricte.jogging.util.TestUtils;
-import io.stricte.jogging.web.rest.model.RunDto;
+import io.stricte.jogging.web.rest.model.UserDto;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,9 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -81,11 +77,11 @@ public class UserControllerIT {
     public void testListAsUser() throws Exception {
         mockMvc.perform(
             get("/users")
-                .with(user("joe").roles(ROLE))
+                .with(user("joe").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
-            .andExpect(status().isOk());
+            .andExpect(status().isForbidden());
     }
 
     @Test
@@ -107,11 +103,11 @@ public class UserControllerIT {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
-            .andExpect(status().isForbidden());
+            .andExpect(status().isOk());
     }
 
     @Test
-    public void testRunsExists() throws Exception {
+    public void testUsersExists() throws Exception {
 
         final User user = userRepository.findByEmail(EMAIL);
 
@@ -131,7 +127,7 @@ public class UserControllerIT {
     }
 
     @Test
-    public void testRunExists() throws Exception {
+    public void testUserExists() throws Exception {
 
         final User user = userRepository.findByEmail(EMAIL);
 
@@ -149,7 +145,7 @@ public class UserControllerIT {
     }
 
     @Test
-    public void testRunNonExistent() throws Exception {
+    public void testUserNonExistent() throws Exception {
 
         final User user = userRepository.findByEmail(EMAIL);
 
@@ -163,19 +159,19 @@ public class UserControllerIT {
     }
 
     @Test
-    public void testCreateRunNoSession() throws Exception {
-        RunDto run = new RunDto(LocalDateTime.now(), Distance.ofMeters(500), Duration.ofMinutes(50));
+    public void testCreateUserNoSession() throws Exception {
+        UserDto user = new UserDto("e", "p");
 
         mockMvc.perform(
             post("/users")
-                .content(TestUtils.convertObjectToJsonBytes(run))
+                .content(TestUtils.convertObjectToJsonBytes(user))
         )
             .andExpect(status().isForbidden());
     }
 
     @Test
-    public void testCreateRunInvalid() throws Exception {
-        RunDto run = new RunDto(null, Distance.ofMeters(500), Duration.ofMinutes(50));
+    public void testCreateUserInvalid() throws Exception {
+        UserDto user = new UserDto("e", "p");
 
         mockMvc.perform(
             post("/users")
@@ -183,7 +179,7 @@ public class UserControllerIT {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(TestUtils.convertObjectToJsonBytes(run))
+                .content(TestUtils.convertObjectToJsonBytes(user))
         )
             .andExpect(status().isBadRequest());
 
@@ -191,8 +187,8 @@ public class UserControllerIT {
     }
 
     @Test
-    public void testCreateRunValid() throws Exception {
-        RunDto run = new RunDto(LocalDateTime.now(), Distance.ofMeters(500), Duration.ofMinutes(50));
+    public void testCreateUserValid() throws Exception {
+        UserDto user = new UserDto("e", "p");
 
         mockMvc.perform(
             post("/users")
@@ -200,7 +196,7 @@ public class UserControllerIT {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(TestUtils.convertObjectToJsonBytes(run))
+                .content(TestUtils.convertObjectToJsonBytes(user))
         )
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
@@ -209,9 +205,9 @@ public class UserControllerIT {
     }
 
     @Test
-    public void testUpdateRunNonExisting() throws Exception {
+    public void testUpdateUserNonExisting() throws Exception {
 
-        RunDto run = new RunDto(LocalDateTime.now(), Distance.ofMeters(500), Duration.ofMinutes(50));
+        UserDto user = new UserDto("e", "p");
 
         mockMvc.perform(
             put("/users")
@@ -219,13 +215,13 @@ public class UserControllerIT {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(TestUtils.convertObjectToJsonBytes(run))
+                .content(TestUtils.convertObjectToJsonBytes(user))
         )
             .andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testUpdateRunExisting() throws Exception {
+    public void testUpdateUserExisting() throws Exception {
 
         User user = new User();
 
@@ -240,12 +236,12 @@ public class UserControllerIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-        //final Run one = runRepository.findOne(savedRun.getId());
+        //final User one = userRepository.findOne(savedUser.getId());
         //assertThat(one.getDistance()).isEqualTo(Distance.ofMeters(999));
     }
 
     @Test
-    public void testDeleteNonExistingOrOtherUsersRuns() throws Exception {
+    public void testDeleteNonExistingUser() throws Exception {
 
         final User user = new User();
         user.setEmail("other.email@example.com");

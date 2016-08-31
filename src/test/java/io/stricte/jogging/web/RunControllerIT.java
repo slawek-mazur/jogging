@@ -92,7 +92,7 @@ public class RunControllerIT {
     public void testListAsUser() throws Exception {
         mockMvc.perform(
             get("/runs")
-                .with(user("joe").roles(ROLE))
+                .with(user("joe").roles("USER"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
