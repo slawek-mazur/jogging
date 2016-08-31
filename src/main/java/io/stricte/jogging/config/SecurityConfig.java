@@ -103,7 +103,7 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
     @Bean
     public RoleHierarchyImpl roleHierarchy() {
         final RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        roleHierarchy.setHierarchy("ROLE_MASTER > ROLE_ADMIN and ROLE_ADMIN > ROLE_USER");
+        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_MANAGER and ROLE_ADMIN > ROLE_USER");
         return roleHierarchy;
     }
 }
