@@ -167,7 +167,7 @@ public class UserControllerIT {
         RunDto run = new RunDto(LocalDateTime.now(), Distance.ofMeters(500), Duration.ofMinutes(50));
 
         mockMvc.perform(
-            post("/run")
+            post("/users")
                 .content(TestUtils.convertObjectToJsonBytes(run))
         )
             .andExpect(status().isForbidden());
