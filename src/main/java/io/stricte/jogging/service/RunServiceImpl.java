@@ -28,12 +28,12 @@ public class RunServiceImpl implements RunService {
     }
 
     public Page<Run> currentUserRuns(Pageable pageable) {
-        return runRepository.findByCurrentUser(pageable);
+        return runRepository.findAllByCurrentUser(pageable);
     }
 
     @Override
     public Run currentUserRun(int id) {
-        return runRepository.findByCurrentUser(id);
+        return runRepository.findOneByCurrentUser(id);
     }
 
     @Override
@@ -56,8 +56,7 @@ public class RunServiceImpl implements RunService {
     @Transactional
     public Run updateRun(RunDto runDto) {
 
-        //todo i should check if that run belongs to currently logged user
-        final Run run = runRepository.findOne(runDto.getId());
+        final Run run = runRepository.findOneByCurrentUser(runDto.getId());
         run.setDay(runDto.getDay());
         run.setDistance(runDto.getDistance());
         run.setDuration(runDto.getDuration());

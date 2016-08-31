@@ -269,10 +269,11 @@ public class RunControllerIT {
         entity.setDay(LocalDateTime.now());
         entity.setDistance(Distance.ofMeters(500));
         entity.setDuration(Duration.ofMinutes(50));
+        entity.setUser(userRepository.findOne(1));
 
-        final Run saved = runRepository.save(entity);
+        final Run savedRun = runRepository.save(entity);
 
-        RunDto run = new RunDto(saved.getId(), saved.getDay(), Distance.ofMeters(999), saved.getDuration());
+        RunDto run = new RunDto(savedRun.getId(), savedRun.getDay(), Distance.ofMeters(999), savedRun.getDuration());
 
         mockMvc.perform(
             put("/runs")
