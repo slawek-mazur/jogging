@@ -27,6 +27,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -218,8 +219,11 @@ public class RunControllerIT {
         RunDto run = new RunDto(LocalDateTime.now(), Distance.ofMeters(500), Duration.ofMinutes(50));
 
         mockMvc.perform(
-            post("/run")
+            post("/runs")
                 .with(user(EMAIL).roles(ROLE))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content(TestUtils.convertObjectToJsonBytes(run))
         )
             .andExpect(status().isCreated())
