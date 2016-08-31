@@ -1,7 +1,7 @@
 package io.stricte.jogging.web;
 
 import io.stricte.jogging.domain.User;
-import io.stricte.jogging.service.UserServiceImpl;
+import io.stricte.jogging.service.UserService;
 import io.stricte.jogging.web.rest.PaginationUtil;
 import io.stricte.jogging.web.rest.model.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +29,12 @@ import static io.stricte.jogging.config.security.Role.MANAGER;
 @Secured(MANAGER)
 @Controller
 @RequestMapping("/users")
-public class UserController {
+class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

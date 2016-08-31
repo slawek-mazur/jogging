@@ -1,7 +1,7 @@
 package io.stricte.jogging.web;
 
 import io.stricte.jogging.domain.Run;
-import io.stricte.jogging.service.RunServiceImpl;
+import io.stricte.jogging.service.RunService;
 import io.stricte.jogging.web.rest.PaginationUtil;
 import io.stricte.jogging.web.rest.model.RunDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +29,12 @@ import static io.stricte.jogging.config.security.Role.USER;
 @Secured(USER)
 @Controller
 @RequestMapping("/runs")
-public class RunController {
+class RunController {
 
-    private final RunServiceImpl runService;
+    private final RunService runService;
 
     @Autowired
-    public RunController(RunServiceImpl runService) {
+    public RunController(RunService runService) {
         this.runService = runService;
     }
 

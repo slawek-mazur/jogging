@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 
 @Service
-public class RunServiceImpl implements RunService {
+class RunServiceImpl implements RunService {
 
     private final RunRepository runRepository;
 
