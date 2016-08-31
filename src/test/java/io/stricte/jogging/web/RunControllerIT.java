@@ -26,6 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -228,6 +229,8 @@ public class RunControllerIT {
                 .content(TestUtils.convertObjectToJsonBytes(run))
         )
             .andExpect(status().isBadRequest());
+
+        assertThat(runRepository.findAll()).isEmpty();
     }
 
     @Test
@@ -244,6 +247,8 @@ public class RunControllerIT {
         )
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+
+        assertThat(runRepository.findAll()).hasSize(1);
     }
 
     @Test
@@ -269,7 +274,7 @@ public class RunControllerIT {
         entity.setDay(LocalDateTime.now());
         entity.setDistance(Distance.ofMeters(500));
         entity.setDuration(Duration.ofMinutes(50));
-        entity.setUser(userRepository.findOne(1));
+        entity.setUser(userRepository.findByEmail(EMAIL));
 
         final Run savedRun = runRepository.save(entity);
 
@@ -285,5 +290,20 @@ public class RunControllerIT {
         )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+
+        final Run one = runRepository.findOne(savedRun.getId());
+        assertThat(one.getDistance()).isEqualTo(Distance.ofMeters(999));
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        mockMvc.perform(
+            delete("/runs/1")
+                .with(user(EMAIL).roles(ROLE))
+                .with(csrf())
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+            .andExpect(status().isBadRequest());
+
     }
 }

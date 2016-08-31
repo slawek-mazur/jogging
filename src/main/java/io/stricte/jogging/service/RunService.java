@@ -14,4 +14,6 @@ public interface RunService {
     Run createRun(RunDto runDto);
 
     Run updateRun(RunDto runDto);
+
+    void deleteRun(int id);
 }

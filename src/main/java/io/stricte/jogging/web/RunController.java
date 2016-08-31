@@ -90,4 +90,17 @@ public class RunController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> updateRun(@PathVariable int id) {
+
+        try {
+            runService.deleteRun(id);
+
+            return ResponseEntity.ok().build();
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

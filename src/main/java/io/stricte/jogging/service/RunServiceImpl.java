@@ -63,4 +63,9 @@ public class RunServiceImpl implements RunService {
 
         return runRepository.save(run);
     }
+
+    @Override
+    public void deleteRun(int id) {
+        runRepository.delete(runRepository.findOneByCurrentUser(id));
+    }
 }
