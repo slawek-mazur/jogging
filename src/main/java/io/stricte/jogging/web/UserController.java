@@ -1,9 +1,9 @@
 package io.stricte.jogging.web;
 
-import io.stricte.jogging.domain.Run;
-import io.stricte.jogging.service.RunServiceImpl;
+import io.stricte.jogging.domain.User;
+import io.stricte.jogging.service.UserServiceImpl;
 import io.stricte.jogging.web.rest.PaginationUtil;
-import io.stricte.jogging.web.rest.model.RunDto;
+import io.stricte.jogging.web.rest.model.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,39 +31,39 @@ import static io.stricte.jogging.config.security.Role.MANAGER;
 @RequestMapping("/users")
 public class UserController {
 
-    private final RunServiceImpl runService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public UserController(RunServiceImpl runService) {
-        this.runService = runService;
+    public UserController(UserServiceImpl userService) {
+        this.userService = userService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Collection<Run>> getRuns(Pageable pageable)
+    public ResponseEntity<Collection<User>> getUsers(Pageable pageable)
         throws URISyntaxException {
 
-        Page<Run> page = runService.currentUserRuns(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/runs");
+        Page<User> page = userService.all(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> getRun(@PathVariable int id) {
-        final Run run = runService.currentUserRun(id);
-        return run != null ? ResponseEntity.ok(run) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> getUser(@PathVariable int id) {
+        final User user = userService.one(id);
+        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> createRun(@Valid @RequestBody RunDto runDto, BindingResult bindingResult) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
         try {
-            Run saved = runService.createRun(runDto);
+            User saved = userService.create(userDto);
 
-            return ResponseEntity.created(new URI("/runs/" + saved.getId()))
+            return ResponseEntity.created(new URI("/users/" + saved.getId()))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .build();
 
@@ -73,14 +73,14 @@ public class UserController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> updateRun(@Valid @RequestBody RunDto runDto, BindingResult bindingResult) {
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
         try {
-            runService.updateRun(runDto);
+            userService.update(userDto);
 
             return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -92,10 +92,10 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> updateRun(@PathVariable int id) {
+    public ResponseEntity<?> updateUser(@PathVariable int id) {
 
         try {
-            runService.deleteRun(id);
+            userService.delete(id);
 
             return ResponseEntity.ok().build();
 

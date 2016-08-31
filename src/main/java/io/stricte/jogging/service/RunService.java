@@ -7,13 +7,13 @@ import org.springframework.data.domain.Pageable;
 
 public interface RunService {
 
-    Page<Run> currentUserRuns(Pageable pageable);
+    Run create(RunDto runDto);
 
-    Run currentUserRun(int id);
+    Page<Run> all(Pageable pageable);
 
-    Run createRun(RunDto runDto);
+    Run one(int id);
 
-    Run updateRun(RunDto runDto);
+    Run update(RunDto runDto);
 
-    void deleteRun(int id);
+    void delete(int id);
 }

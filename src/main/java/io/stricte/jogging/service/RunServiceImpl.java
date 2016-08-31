@@ -27,18 +27,9 @@ public class RunServiceImpl implements RunService {
         this.userRepository = userRepository;
     }
 
-    public Page<Run> currentUserRuns(Pageable pageable) {
-        return runRepository.findAllByCurrentUser(pageable);
-    }
-
-    @Override
-    public Run currentUserRun(int id) {
-        return runRepository.findOneByCurrentUser(id);
-    }
-
     @Override
     @Transactional
-    public Run createRun(RunDto runDto) {
+    public Run create(RunDto runDto) {
 
         Principal principal = SecurityContextHolder.getContext().getAuthentication();
         final User user = userRepository.findByEmail(principal.getName());
@@ -52,9 +43,18 @@ public class RunServiceImpl implements RunService {
         return runRepository.save(run);
     }
 
+    public Page<Run> all(Pageable pageable) {
+        return runRepository.findAllByCurrentUser(pageable);
+    }
+
+    @Override
+    public Run one(int id) {
+        return runRepository.findOneByCurrentUser(id);
+    }
+
     @Override
     @Transactional
-    public Run updateRun(RunDto runDto) {
+    public Run update(RunDto runDto) {
 
         final Run run = runRepository.findOneByCurrentUser(runDto.getId());
         run.setDay(runDto.getDay());
@@ -65,7 +65,7 @@ public class RunServiceImpl implements RunService {
     }
 
     @Override
-    public void deleteRun(int id) {
+    public void delete(int id) {
         runRepository.delete(runRepository.findOneByCurrentUser(id));
     }
 }

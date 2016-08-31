@@ -4,6 +4,8 @@ import io.stricte.jogging.domain.User;
 import io.stricte.jogging.repository.UserRepository;
 import io.stricte.jogging.web.rest.model.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +44,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean emailRegistered(String email) {
         return userRepository.findByEmail(email) != null;
+    }
+
+    @Override
+    public User create(UserDto userDto) {
+        return null;
+    }
+
+    @Override
+    public Page<User> all(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public User one(int id) {
+        return null;
+    }
+
+    @Override
+    public void update(UserDto userDto) {
+
+    }
+
+    @Override
+    public void delete(int id) {
+
     }
 }

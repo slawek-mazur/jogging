@@ -42,14 +42,14 @@ public class RunController {
     public ResponseEntity<Collection<Run>> getRuns(Pageable pageable)
         throws URISyntaxException {
 
-        Page<Run> page = runService.currentUserRuns(pageable);
+        Page<Run> page = runService.all(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/runs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> getRun(@PathVariable int id) {
-        final Run run = runService.currentUserRun(id);
+        final Run run = runService.one(id);
         return run != null ? ResponseEntity.ok(run) : ResponseEntity.notFound().build();
     }
 
@@ -61,7 +61,7 @@ public class RunController {
         }
 
         try {
-            Run saved = runService.createRun(runDto);
+            Run saved = runService.create(runDto);
 
             return ResponseEntity.created(new URI("/runs/" + saved.getId()))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -80,7 +80,7 @@ public class RunController {
         }
 
         try {
-            runService.updateRun(runDto);
+            runService.update(runDto);
 
             return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -95,7 +95,7 @@ public class RunController {
     public ResponseEntity<?> updateRun(@PathVariable int id) {
 
         try {
-            runService.deleteRun(id);
+            runService.delete(id);
 
             return ResponseEntity.ok().build();
 
