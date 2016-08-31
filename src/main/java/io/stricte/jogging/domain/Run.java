@@ -42,4 +42,8 @@ public class Run implements Serializable {
     @JoinColumn(name = "user")
     @JsonBackReference
     private User user;
+
+    public double averageSpeed() {
+        return distance.toMeters() / (double) duration.toMillis();
+    }
 }

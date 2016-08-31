@@ -7,6 +7,8 @@ import io.stricte.jogging.domain.User;
 import io.stricte.jogging.repository.RunRepository;
 import io.stricte.jogging.repository.UserRepository;
 import io.stricte.jogging.service.RunService;
+import io.stricte.jogging.util.TestUtils;
+import io.stricte.jogging.web.rest.model.RunDto;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,17 +26,20 @@ import org.springframework.web.context.WebApplicationContext;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RunControllerIT {
 
     private static final String EMAIL = "email@example.com";
+
+    private static final String ROLE = "USER";
 
     private final PasswordEncoder passwordEncoder = new StandardPasswordEncoder();
 
@@ -86,7 +91,7 @@ public class RunControllerIT {
     public void testListAsUser() throws Exception {
         mockMvc.perform(
             get("/runs")
-                .with(user("joe").roles("USER"))
+                .with(user("joe").roles(ROLE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
@@ -133,11 +138,12 @@ public class RunControllerIT {
 
         mockMvc.perform(
             get("/runs?sort=day,desc")
-                .with(user(EMAIL).roles("USER"))
+                .with(user(EMAIL).roles(ROLE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
             .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.length()").value(3))
             .andExpect(jsonPath("$[0].duration.minutes").value(135))
             .andExpect(jsonPath("$[1].duration.minutes").value(75))
@@ -161,11 +167,12 @@ public class RunControllerIT {
 
         mockMvc.perform(
             get("/runs/1")
-                .with(user(EMAIL).roles("USER"))
+                .with(user(EMAIL).roles(ROLE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
             .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.id").value(1))
             .andExpect(jsonPath("$.distance.meters").value(1500))
             .andExpect(jsonPath("$.duration.minutes").value(25));
@@ -188,10 +195,36 @@ public class RunControllerIT {
 
         mockMvc.perform(
             get("/runs/5")
-                .with(user(EMAIL).roles("USER"))
+                .with(user(EMAIL).roles(ROLE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testCreateRunNoSession() throws Exception {
+        RunDto run = new RunDto(LocalDateTime.now(), Distance.ofMeters(500), Duration.ofMinutes(50));
+
+        mockMvc.perform(
+            post("/run")
+                .content(TestUtils.convertObjectToJsonBytes(run))
+        )
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void testCreateRun() throws Exception {
+        RunDto run = new RunDto(LocalDateTime.now(), Distance.ofMeters(500), Duration.ofMinutes(50));
+
+        mockMvc.perform(
+            post("/run")
+                .with(user(EMAIL).roles(ROLE))
+                .content(TestUtils.convertObjectToJsonBytes(run))
+        )
+            .andExpect(status().isCreated())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+
+        assertThat(runService.currentUserRun(1)).isNotNull();
     }
 }
