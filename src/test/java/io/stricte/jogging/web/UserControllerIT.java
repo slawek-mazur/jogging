@@ -36,7 +36,7 @@ public class UserControllerIT {
 
     private static final String EMAIL = "email@example.com";
 
-    private static final String ROLE = "USER";
+    private static final String ROLE = "MANAGER";
 
     private final PasswordEncoder passwordEncoder = new StandardPasswordEncoder();
 
