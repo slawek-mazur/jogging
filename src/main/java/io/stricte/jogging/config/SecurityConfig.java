@@ -1,5 +1,6 @@
 package io.stricte.jogging.config;
 
+import io.stricte.jogging.config.security.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.AccessDecisionManager;
@@ -103,7 +104,7 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
     @Bean
     public RoleHierarchyImpl roleHierarchy() {
         final RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_MANAGER and ROLE_ADMIN > ROLE_USER");
+        roleHierarchy.setHierarchy(Role.ADMIN + " > " + Role.MANAGER + " and " + Role.ADMIN + " > " + Role.USER);
         return roleHierarchy;
     }
 }

@@ -24,9 +24,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
-import static io.stricte.jogging.config.security.Role.ROLE_USER;
+import static io.stricte.jogging.config.security.Role.USER;
 
-@Secured(ROLE_USER)
+@Secured(USER)
 @Controller
 @RequestMapping("/runs")
 public class RunController {
