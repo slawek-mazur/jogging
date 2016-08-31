@@ -111,6 +111,17 @@ public class RunControllerIT {
     }
 
     @Test
+    public void testListAsManager() throws Exception {
+        mockMvc.perform(
+            get("/runs")
+                .with(user("joe").roles("MANAGER"))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
     public void testRunsExists() throws Exception {
 
         final User user = userRepository.findByEmail(EMAIL);

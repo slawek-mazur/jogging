@@ -2,9 +2,15 @@ package io.stricte.jogging.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -13,72 +19,91 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+import java.util.List;
 
-    @Autowired
-    UserDetailsService userDetailsService;
-
-    @Autowired
-    DefaultWebSecurityExpressionHandler expressionHandler;
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .userDetailsService(userDetailsService);
-    }
+@EnableGlobalMethodSecurity(securedEnabled = true)
+public class SecurityConfig extends GlobalMethodSecurityConfiguration {
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        // @formatter:off
-        http
-            .formLogin()
-				.loginPage("/login")
-                .defaultSuccessUrl("/index")
-				.failureUrl("/login?error")
-                .permitAll()
-			.and()
-                .logout()
-                    .logoutSuccessUrl("/login?logout")
-                    .logoutUrl("/logout")
-                    .deleteCookies("JSESSIONID")
-                    .permitAll()
-            .and()
-                .authorizeRequests()
-                    .expressionHandler(expressionHandler)
-                    .antMatchers(
-                        "/runs/**",
-                        "/admin/**",
-                        "/management/**"
-                    ).authenticated()
-                    .anyRequest().permitAll()
-            .and()
-                .rememberMe()
-            .and()
-                .exceptionHandling()
-                    .accessDeniedPage("/accessDenied");
-
-        // @formatter:on
+    protected AccessDecisionManager accessDecisionManager() {
+        final AffirmativeBased manager = (AffirmativeBased) super.accessDecisionManager();
+        final List<AccessDecisionVoter<?>> decisionVoters = manager.getDecisionVoters();
+        decisionVoters.clear();
+        decisionVoters.add(roleHierarchyVoter());
+        return manager;
     }
 
-    @Configuration
-    static class SecurityAuxiliaryConfig {
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService userDetailsService)
+        throws Exception {
 
-        @Bean
-        PasswordEncoder passwordEncoder() {
-            return new StandardPasswordEncoder();
+        auth.userDetailsService(userDetailsService);
+    }
+
+    @EnableWebSecurity
+    static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+        @Autowired
+        DefaultWebSecurityExpressionHandler expressionHandler;
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            http
+                .formLogin()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/index")
+                    .failureUrl("/login?error")
+                    .permitAll()
+                .and()
+                    .logout()
+                        .logoutSuccessUrl("/login?logout")
+                        .logoutUrl("/logout")
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                .and()
+                    .authorizeRequests()
+                        .expressionHandler(expressionHandler)
+                        .antMatchers(
+                            "/runs/**",
+                            "/admin/**",
+                            "/management/**"
+                        ).authenticated()
+                        .anyRequest().permitAll()
+                .and()
+                    .rememberMe()
+                .and()
+                    .exceptionHandling()
+                        .accessDeniedPage("/accessDenied");
+
+            // @formatter:on
         }
 
         @Bean
-        DefaultWebSecurityExpressionHandler expressionHandler() {
+        DefaultWebSecurityExpressionHandler expressionHandler(RoleHierarchy roleHierarchy) {
             final DefaultWebSecurityExpressionHandler handler =
                 new DefaultWebSecurityExpressionHandler();
 
-            final RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-            roleHierarchy.setHierarchy("ROLE_MASTER > ROLE_ADMIN and ROLE_ADMIN > ROLE_USER");
             handler.setRoleHierarchy(roleHierarchy);
 
             return handler;
         }
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new StandardPasswordEncoder();
+    }
+
+    @Bean
+    public RoleHierarchyVoter roleHierarchyVoter() {
+        return new RoleHierarchyVoter(roleHierarchy());
+    }
+
+    @Bean
+    public RoleHierarchyImpl roleHierarchy() {
+        final RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy("ROLE_MASTER > ROLE_ADMIN and ROLE_ADMIN > ROLE_USER");
+        return roleHierarchy;
     }
 }
