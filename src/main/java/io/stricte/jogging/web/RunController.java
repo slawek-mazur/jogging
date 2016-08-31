@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -33,11 +34,17 @@ public class RunController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Collection<Run>> list(Pageable pageable)
+    public ResponseEntity<Collection<Run>> getRuns(Pageable pageable)
         throws URISyntaxException {
 
         Page<Run> page = runService.currentUserRuns(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/runs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> getRun(@PathVariable int id) {
+        final Run run = runService.currentUserRun(id);
+        return run != null ? ResponseEntity.ok(run) : ResponseEntity.notFound().build();
     }
 }

@@ -20,4 +20,9 @@ public class RunServiceImpl implements RunService {
     public Page<Run> currentUserRuns(Pageable pageable) {
         return runRepository.findByCurrentUser(pageable);
     }
+
+    @Override
+    public Run currentUserRun(int id) {
+        return runRepository.findByCurrentUser(id);
+    }
 }

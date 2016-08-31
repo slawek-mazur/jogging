@@ -27,7 +27,6 @@ import java.time.LocalDateTime;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -139,10 +138,60 @@ public class RunControllerIT {
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
             .andExpect(status().isOk())
-            .andDo(print())
             .andExpect(jsonPath("$.length()").value(3))
             .andExpect(jsonPath("$[0].duration.minutes").value(135))
             .andExpect(jsonPath("$[1].duration.minutes").value(75))
             .andExpect(jsonPath("$[2].duration.minutes").value(25));
+    }
+
+    @Test
+    public void testRunExists() throws Exception {
+
+        final User user = userRepository.findByEmail(EMAIL);
+
+        final LocalDateTime now = LocalDateTime.now();
+
+        final Run run1 = new Run();
+        run1.setUser(user);
+        run1.setDistance(Distance.ofMeters(1500));
+        run1.setDuration(Duration.ofMinutes(25));
+        run1.setDay(now.minusDays(3));
+
+        runRepository.save(Sets.newHashSet(run1));
+
+        mockMvc.perform(
+            get("/runs/1")
+                .with(user(EMAIL).roles("USER"))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.distance.meters").value(1500))
+            .andExpect(jsonPath("$.duration.minutes").value(25));
+    }
+
+    @Test
+    public void testRunNonExistent() throws Exception {
+
+        final User user = userRepository.findByEmail(EMAIL);
+
+        final LocalDateTime now = LocalDateTime.now();
+
+        final Run run1 = new Run();
+        run1.setUser(user);
+        run1.setDistance(Distance.ofMeters(1500));
+        run1.setDuration(Duration.ofMinutes(25));
+        run1.setDay(now.minusDays(3));
+
+        runRepository.save(Sets.newHashSet(run1));
+
+        mockMvc.perform(
+            get("/runs/5")
+                .with(user(EMAIL).roles("USER"))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+            .andExpect(status().isNotFound());
     }
 }

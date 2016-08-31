@@ -7,4 +7,6 @@ import org.springframework.data.domain.Pageable;
 public interface RunService {
 
     Page<Run> currentUserRuns(Pageable pageable);
+
+    Run currentUserRun(int id);
 }

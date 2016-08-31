@@ -163,7 +163,6 @@ public class AccountControllerIT {
                 .content(TestUtils.convertObjectToJsonBytes(user))
         )
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andDo(print());
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 }
