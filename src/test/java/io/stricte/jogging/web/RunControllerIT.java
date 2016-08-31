@@ -165,17 +165,17 @@ public class RunControllerIT {
         run1.setDuration(Duration.ofMinutes(25));
         run1.setDay(now.minusDays(3));
 
-        runRepository.save(Sets.newHashSet(run1));
+        final Run savedRun = runRepository.save(run1);
 
         mockMvc.perform(
-            get("/runs/1")
+            get("/runs/" + savedRun.getId())
                 .with(user(EMAIL).roles(ROLE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.id").value(savedRun.getId()))
             .andDo(print())
             .andExpect(jsonPath("$.distance").value(1500))
             .andExpect(jsonPath("$.duration").value(25 * 60));
@@ -188,16 +188,16 @@ public class RunControllerIT {
 
         final LocalDateTime now = LocalDateTime.now();
 
-        final Run run1 = new Run();
-        run1.setUser(user);
-        run1.setDistance(Distance.ofMeters(1500));
-        run1.setDuration(Duration.ofMinutes(25));
-        run1.setDay(now.minusDays(3));
+        final Run run = new Run();
+        run.setUser(user);
+        run.setDistance(Distance.ofMeters(1500));
+        run.setDuration(Duration.ofMinutes(25));
+        run.setDay(now.minusDays(3));
 
-        runRepository.save(Sets.newHashSet(run1));
+        runRepository.save(run);
 
         mockMvc.perform(
-            get("/runs/5")
+            get("/runs/999")
                 .with(user(EMAIL).roles(ROLE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -296,14 +296,50 @@ public class RunControllerIT {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    public void testDeleteNonExistingOrOtherUsersRuns() throws Exception {
+
+        final User user = new User();
+        user.setEmail("other.email@example.com");
+        user.setPassword(passwordEncoder.encode("pass"));
+        final User savedUser = userRepository.save(user);
+
+        final Run entity = new Run();
+        entity.setDay(LocalDateTime.now());
+        entity.setDistance(Distance.ofMeters(500));
+        entity.setDuration(Duration.ofMinutes(50));
+        entity.setUser(savedUser);
+
+        final Run savedRun = runRepository.save(entity);
+
         mockMvc.perform(
-            delete("/runs/1")
+            delete("/runs/" + savedRun.getId())
                 .with(user(EMAIL).roles(ROLE))
                 .with(csrf())
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
             .andExpect(status().isBadRequest());
 
+    }
+
+    @Test
+    public void testDeleteExisting() throws Exception {
+
+        final Run entity = new Run();
+        entity.setDay(LocalDateTime.now());
+        entity.setDistance(Distance.ofMeters(500));
+        entity.setDuration(Duration.ofMinutes(50));
+        entity.setUser(userRepository.findByEmail(EMAIL));
+
+        final Run savedRun = runRepository.save(entity);
+
+        mockMvc.perform(
+            delete("/runs/" + savedRun.getId())
+                .with(user(EMAIL).roles(ROLE))
+                .with(csrf())
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+            .andExpect(status().isOk());
+
+        assertThat(runRepository.findAll()).isEmpty();
     }
 }
