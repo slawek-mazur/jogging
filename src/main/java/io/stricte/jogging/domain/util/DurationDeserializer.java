@@ -3,20 +3,20 @@ package io.stricte.jogging.domain.util;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import io.stricte.jogging.domain.Distance;
 
 import java.io.IOException;
+import java.time.Duration;
 
-public class DistanceDeserializer extends JsonDeserializer<Distance> {
+public class DurationDeserializer extends JsonDeserializer<Duration> {
 
     private static final long serialVersionUID = 1L;
 
-    public static final JsonDeserializer<? extends Distance> INSTANCE = new DistanceDeserializer();
+    public static final JsonDeserializer<? extends Duration> INSTANCE = new DurationDeserializer();
 
     @Override
-    public Distance deserialize(JsonParser jp, DeserializationContext ctx)
+    public Duration deserialize(JsonParser jp, DeserializationContext ctx)
         throws IOException {
 
-        return Distance.ofMeters(jp.getLongValue());
+        return Duration.ofSeconds(jp.getLongValue());
     }
 }

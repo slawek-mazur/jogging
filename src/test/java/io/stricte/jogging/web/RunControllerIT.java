@@ -31,6 +31,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -145,9 +146,10 @@ public class RunControllerIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.length()").value(3))
-            .andExpect(jsonPath("$[0].duration.minutes").value(135))
-            .andExpect(jsonPath("$[1].duration.minutes").value(75))
-            .andExpect(jsonPath("$[2].duration.minutes").value(25));
+            .andDo(print())
+            .andExpect(jsonPath("$[0].duration").value(135 * 60))
+            .andExpect(jsonPath("$[1].duration").value(75 * 60))
+            .andExpect(jsonPath("$[2].duration").value(25 * 60));
     }
 
     @Test
@@ -174,8 +176,9 @@ public class RunControllerIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.id").value(1))
-            .andExpect(jsonPath("$.distance.meters").value(1500))
-            .andExpect(jsonPath("$.duration.minutes").value(25));
+            .andDo(print())
+            .andExpect(jsonPath("$.distance").value(1500))
+            .andExpect(jsonPath("$.duration").value(25 * 60));
     }
 
     @Test

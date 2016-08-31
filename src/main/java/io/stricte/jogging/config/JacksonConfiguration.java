@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.stricte.jogging.domain.Distance;
 import io.stricte.jogging.domain.util.DistanceDeserializer;
 import io.stricte.jogging.domain.util.DistanceSerializer;
+import io.stricte.jogging.domain.util.DurationDeserializer;
+import io.stricte.jogging.domain.util.DurationSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
+import java.time.Duration;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -30,6 +33,9 @@ public class JacksonConfiguration {
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
         builder.serializerByType(Distance.class, DistanceSerializer.INSTANCE);
         builder.deserializerByType(Distance.class, DistanceDeserializer.INSTANCE);
+
+        builder.serializerByType(Duration.class, DurationSerializer.INSTANCE);
+        builder.deserializerByType(Duration.class, DurationDeserializer.INSTANCE);
 
         return builder.createXmlMapper(false).build();
     }
