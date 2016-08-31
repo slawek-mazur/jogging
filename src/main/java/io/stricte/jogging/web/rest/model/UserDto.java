@@ -11,6 +11,8 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class UserDto {
 
+    private int id;
+
     @Email
     @Size(max = 100)
     private String email;
@@ -18,4 +20,9 @@ public class UserDto {
     @NotNull
     @Size(min = 10, max = 80)
     private String password;
+
+    public UserDto(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }

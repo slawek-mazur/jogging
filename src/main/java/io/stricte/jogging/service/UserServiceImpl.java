@@ -53,21 +53,24 @@ class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> all(Pageable pageable) {
-        return null;
+        return userRepository.findAll(pageable);
     }
 
     @Override
     public User one(int id) {
-        return null;
+        return userRepository.findOne(id);
     }
 
     @Override
     public void update(UserDto userDto) {
-
+        final User user = userRepository.findOne(userDto.getId());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userRepository.save(user);
     }
 
     @Override
     public void delete(int id) {
-
+        userRepository.delete(id);
     }
 }
