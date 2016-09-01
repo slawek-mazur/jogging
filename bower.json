@@ -1,14 +1,24 @@
 {
-    "name": "cluster-service",
-    "description": "Cluster Service",
-    "version": "2.0-SNAPSHOP",
-    "license": "MIT",
-    "private": true,
-    "dependencies": {
-        "bootstrap-social": "",
-        "bootstrap3-dialog": "",
-        "remarkable-bootstrap-notify": "",
-        "angular": "",
-        "angular-route": ""
-    }
+  "name": "cluster-service",
+  "description": "Cluster Service",
+  "version": "2.0-SNAPSHOP",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "1.5.8",
+    "angular-aria": "1.5.8",
+    "angular-bootstrap": "1.3.3",
+    "angular-cache-buster": "0.4.3",
+    "angular-cookies": "1.5.8",
+    "ngstorage": "0.3.10",
+    "angular-loading-bar": "0.9.0",
+    "angular-resource": "1.5.8",
+    "angular-sanitize": "1.5.8",
+    "angular-ui-router": "0.3.1",
+    "bootstrap": "3.3.6",
+    "bootstrap-ui-datetime-picker": "2.4.3",
+    "jquery": "3.1.0",
+    "json3": "3.3.2",
+    "messageformat": "0.3.1"
+  }
 }
