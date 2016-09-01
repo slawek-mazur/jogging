@@ -1,0 +1,23 @@
+<div class="container">
+    <form class="reservation" ng-submit="controller.continue()">
+        <div class="form-group">
+            <label class="radio-inline">
+                <input type="radio" ng-model="controller.returning" name="ticket-type" id="return" value="return"> Return
+            </label>
+            <label class="radio-inline">
+                <input type="radio" ng-model="controller.returning" name="ticket-type" id="oneway" value="oneway"> One way
+            </label>
+        </div>
+        <div class="form-inline">
+            <div class="form-group">
+                <label for="from">From: </label>
+                <input bs3-typeahead bs3-promise="departures" bs3-displayText="airportName" bs3-afterSelect="departureSelected" ng-model="controller.departure" type="text" class="form-control" id="from" placeholder="Wroclaw">
+            </div>
+            <div class="form-group">
+                <label for="to">To: </label>
+                <input bs3-typeahead bs3-promise="destinations" bs3-displayText="airportName" bs3-afterSelect="destinationSelected" ng-disabled="controller.oneway()" ng-model="controller.destination" type="text" class="form-control" id="to" placeholder="Rome">
+            </div>
+            <button type="submit" class="btn btn-default">Continue</button>
+        </div>
+    </form>
+</div>

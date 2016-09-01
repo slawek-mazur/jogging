@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="login-container">
+        <section>
+            <a title="logging through linkedin" href="auth/linkedin?scope=r_basicprofile%20r_emailaddress" class="btn btn-social-icon btn-linkedin"><i class="fa fa-linkedin"></i></a>
+            <a title="logging through google+" href="auth/google?scope=profile" class="btn btn-social-icon btn-google"><i class="fa fa-google-plus"></i></a>
+            <span id="login-text"></span>
+        </section>
+    </div>
+</div>
+<script type="text/javascript" src="assets/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('a.btn-social-icon').click(function () {
+            var me = $(this);
+
+            $('#error-section').remove();
+
+            me.siblings('a.btn-social-icon').hide();
+            me.animate({
+                left: "-=100",
+                opacity: .5
+            }, 250, function () {
+                me.attr('disabled', 'disabled');
+
+                var loader = $('#login-text');
+
+                loader.text('logging through ' + me.attr('title') + ' ...');
+                loader.animate({
+                    left: me.position().left + me.width() + 10,
+                    opacity: 1
+                }, 70);
+            })
+        });
+    });
+</script>

@@ -1,0 +1,14 @@
+{
+    "name": "cluster-service",
+    "description": "Cluster Service",
+    "version": "2.0-SNAPSHOP",
+    "license": "MIT",
+    "private": true,
+    "dependencies": {
+        "bootstrap-social": "",
+        "bootstrap3-dialog": "",
+        "remarkable-bootstrap-notify": "",
+        "angular": "",
+        "angular-route": ""
+    }
+}
