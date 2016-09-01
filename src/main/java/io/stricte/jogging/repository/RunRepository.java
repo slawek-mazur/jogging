@@ -9,9 +9,11 @@ import org.springframework.data.repository.query.Param;
 
 public interface RunRepository extends JpaRepository<Run, Integer> {
 
-    @Query("select run from Run run where run.user.email = ?#{principal?.username}")
+    @Query("select run from Run run where run.user.email like " +
+        "?#{hasRole('ROLE_ADMIN') ? '%' : principal?.username}")
     Page<Run> findAllByCurrentUser(Pageable pageable);
 
-    @Query("select run from Run run where run.user.email = ?#{principal?.username} and run.id = :id")
+    @Query("select run from Run run where run.user.email like " +
+        "?#{hasRole('ROLE_ADMIN') ? '%' : principal?.username} and run.id = :id")
     Run findOneByCurrentUser(@Param("id") int id);
 }

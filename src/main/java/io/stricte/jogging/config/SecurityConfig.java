@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.AffirmativeBased;
@@ -15,9 +16,12 @@ import org.springframework.security.config.annotation.method.configuration.Globa
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
 import java.util.List;
@@ -35,7 +39,7 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService userDetailsService)
+    void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService userDetailsService)
         throws Exception {
 
         auth.userDetailsService(userDetailsService);
@@ -92,17 +96,37 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
     }
 
     @Bean
+    SecurityEvaluationContextExtension extension() {
+        return new SecurityEvaluationContextExtension() {
+            
+            @Override
+            public Object getRootObject() {
+                Authentication authentication = getAuthentication();
+                final SecurityExpressionRoot root = new SecurityExpressionRoot(authentication) {
+
+                };
+                root.setRoleHierarchy(roleHierarchy());
+                return root;
+            }
+
+            private Authentication getAuthentication() {
+                return SecurityContextHolder.getContext().getAuthentication();
+            }
+        };
+    }
+
+    @Bean
     PasswordEncoder passwordEncoder() {
         return new StandardPasswordEncoder();
     }
 
     @Bean
-    public RoleHierarchyVoter roleHierarchyVoter() {
+    RoleHierarchyVoter roleHierarchyVoter() {
         return new RoleHierarchyVoter(roleHierarchy());
     }
 
     @Bean
-    public RoleHierarchyImpl roleHierarchy() {
+    RoleHierarchyImpl roleHierarchy() {
         final RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
         roleHierarchy.setHierarchy(Role.ADMIN + " > " + Role.MANAGER + " and " + Role.ADMIN + " > " + Role.USER);
         return roleHierarchy;

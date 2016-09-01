@@ -159,6 +159,19 @@ public class RunControllerIT {
             .andExpect(jsonPath("$[0].duration").value(135 * 60))
             .andExpect(jsonPath("$[1].duration").value(75 * 60))
             .andExpect(jsonPath("$[2].duration").value(25 * 60));
+
+        mockMvc.perform(
+            get("/runs?sort=day,desc")
+                .with(user("adminsEmail").roles("ADMIN"))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.length()").value(3))
+            .andExpect(jsonPath("$[0].duration").value(135 * 60))
+            .andExpect(jsonPath("$[1].duration").value(75 * 60))
+            .andExpect(jsonPath("$[2].duration").value(25 * 60));
     }
 
     @Test
@@ -179,6 +192,18 @@ public class RunControllerIT {
         mockMvc.perform(
             get("/runs/" + savedRun.getId())
                 .with(user(EMAIL).roles(ROLE))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.id").value(savedRun.getId()))
+            .andExpect(jsonPath("$.distance").value(1500))
+            .andExpect(jsonPath("$.duration").value(25 * 60));
+
+        mockMvc.perform(
+            get("/runs/" + savedRun.getId())
+                .with(user("adminsEmail").roles("ADMIN"))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
