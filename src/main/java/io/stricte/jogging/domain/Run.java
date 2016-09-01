@@ -25,18 +25,22 @@ public class Run implements Serializable {
 
     @NotNull
     @Column(name = "distance", nullable = false)
-    private Distance distance;
+    private Distance distance = Distance.ofMeters(0);
 
     @NotNull
     @Column(name = "duration", nullable = false)
-    private Duration duration;
+    private Duration duration = Duration.ofMinutes(1);
 
     @ManyToOne
     @JoinColumn(name = "user")
     @JsonBackReference
     private User user;
 
-    public double averageSpeed() {
-        return distance.toMeters() / (double) duration.toMillis();
+    @Transient
+    private double averageSpeed = 0.0;
+
+    @PostLoad
+    void afterLoad() {
+        averageSpeed = (long) ((distance.toMeters() / (double) duration.toMinutes()) * 1e2) / 1e2;
     }
 }
