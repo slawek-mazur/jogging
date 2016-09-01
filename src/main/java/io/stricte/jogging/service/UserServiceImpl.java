@@ -1,5 +1,6 @@
 package io.stricte.jogging.service;
 
+import com.google.common.base.Strings;
 import io.stricte.jogging.domain.User;
 import io.stricte.jogging.repository.UserRepository;
 import io.stricte.jogging.web.rest.model.UserDto;
@@ -25,11 +26,7 @@ class UserServiceImpl implements UserService {
     }
 
     public User register(UserDto userDto) {
-        final User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
-        return userRepository.save(user);
+        return create(userDto);
     }
 
     @Override
@@ -50,7 +47,12 @@ class UserServiceImpl implements UserService {
     public User create(UserDto userDto) {
         final User user = new User();
         user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
+        final String password = userDto.getPassword();
+        if (Strings.isNullOrEmpty(password) || password.length() < 5) {
+            throw new IllegalArgumentException("Password is too short");
+        }
+        user.setPassword(passwordEncoder.encode(password));
         return userRepository.save(user);
     }
 
@@ -68,7 +70,10 @@ class UserServiceImpl implements UserService {
     public void update(UserDto userDto) {
         final User user = userRepository.findOne(userDto.getId());
         user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        //update password if set
+        if (!Strings.isNullOrEmpty(userDto.getPassword())) {
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        }
         userRepository.save(user);
     }
 

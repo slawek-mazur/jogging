@@ -107,11 +107,11 @@ public class UserControllerIT {
     @Test
     public void testUsersExists() throws Exception {
 
-        userService.create(new UserDto("amanda@example.com", "pass"));
-        userService.create(new UserDto("bradd@example.com", "pass"));
-        userService.create(new UserDto("daniel@example.com", "pass"));
-        userService.create(new UserDto("jessica@example.com", "pass"));
-        userService.create(new UserDto("monica@example.com", "pass"));
+        userService.create(new UserDto("amanda@example.com", "password"));
+        userService.create(new UserDto("bradd@example.com", "password"));
+        userService.create(new UserDto("daniel@example.com", "password"));
+        userService.create(new UserDto("jessica@example.com", "password"));
+        userService.create(new UserDto("monica@example.com", "password"));
 
         mockMvc.perform(
             get("/users?sort=email,desc")
@@ -132,7 +132,7 @@ public class UserControllerIT {
 
     @Test
     public void testUserExists() throws Exception {
-        User user = userService.create(new UserDto("joey@example.com", "pass"));
+        User user = userService.create(new UserDto("joey@example.com", "password"));
 
         mockMvc.perform(
             get("/users/" + user.getId())
@@ -222,9 +222,18 @@ public class UserControllerIT {
     @Test
     public void testUpdateUserExisting() throws Exception {
 
-        final User user = userService.create(new UserDto("daniel@example.com", "password"));
+        final String email = "daniel@example.com";
+        final String password = passwordEncoder.encode("password");
 
-        final UserDto userDto = new UserDto(user.getId(), "david@example.com", "password");
+        final User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+
+        final User saved = userRepository.save(user);
+
+        final UserDto userDto = new UserDto();
+        userDto.setId(saved.getId());
+        userDto.setEmail("david@example.com");
 
         mockMvc.perform(
             put("/users")
@@ -237,8 +246,9 @@ public class UserControllerIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-        final User existing = userRepository.findOne(user.getId());
+        final User existing = userRepository.findOne(saved.getId());
         assertThat(existing.getEmail()).isEqualTo(userDto.getEmail());
+        assertThat(existing.getPassword()).isEqualTo(saved.getPassword());
     }
 
     @Test

@@ -38,11 +38,16 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        final User registered = userService.register(userDto);
+        try {
+            final User registered = userService.register(userDto);
 
-        return ResponseEntity.created(new URI("/users/" + registered.getId()))
-            .contentType(MediaType.APPLICATION_JSON_UTF8)
-            .build();
+            return ResponseEntity.created(new URI("/users/" + registered.getId()))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .build();
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
