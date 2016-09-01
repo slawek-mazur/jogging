@@ -18,7 +18,7 @@ public class UserDto {
     private String email;
 
     @NotNull
-    @Size(min = 10, max = 80)
+    @Size(min = 5)
     private String password;
 
     public UserDto(String email, String password) {

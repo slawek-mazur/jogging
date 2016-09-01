@@ -2,6 +2,7 @@ package io.stricte.jogging.web;
 
 import io.stricte.jogging.domain.User;
 import io.stricte.jogging.repository.UserRepository;
+import io.stricte.jogging.service.UserService;
 import io.stricte.jogging.util.TestUtils;
 import io.stricte.jogging.web.rest.model.UserDto;
 import org.junit.After;
@@ -40,6 +41,9 @@ public class UserControllerIT {
     UserRepository userRepository;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
@@ -50,12 +54,6 @@ public class UserControllerIT {
             .webAppContextSetup(this.wac)
             .apply(springSecurity())
             .build();
-
-        final User user = new User();
-        user.setEmail(EMAIL);
-        user.setPassword(passwordEncoder.encode("pass"));
-
-        userRepository.save(user);
     }
 
     @After
@@ -109,27 +107,32 @@ public class UserControllerIT {
     @Test
     public void testUsersExists() throws Exception {
 
-        final User user = userRepository.findByEmail(EMAIL);
+        userService.create(new UserDto("amanda@example.com", "pass"));
+        userService.create(new UserDto("bradd@example.com", "pass"));
+        userService.create(new UserDto("daniel@example.com", "pass"));
+        userService.create(new UserDto("jessica@example.com", "pass"));
+        userService.create(new UserDto("monica@example.com", "pass"));
 
         mockMvc.perform(
-            get("/users?sort=day,desc")
+            get("/users?sort=email,desc")
                 .with(user(EMAIL).roles(ROLE))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(jsonPath("$.length()").value(3))
             .andDo(print())
-            .andExpect(jsonPath("$[0].duration").value(135 * 60))
-            .andExpect(jsonPath("$[1].duration").value(75 * 60))
-            .andExpect(jsonPath("$[2].duration").value(25 * 60));
+            .andExpect(jsonPath("$.length()").value(5))
+            .andExpect(jsonPath("$[0].email").value("monica@example.com"))
+            .andExpect(jsonPath("$[1].email").value("jessica@example.com"))
+            .andExpect(jsonPath("$[2].email").value("daniel@example.com"))
+            .andExpect(jsonPath("$[3].email").value("bradd@example.com"))
+            .andExpect(jsonPath("$[4].email").value("amanda@example.com"));
     }
 
     @Test
     public void testUserExists() throws Exception {
-
-        final User user = userRepository.findByEmail(EMAIL);
+        User user = userService.create(new UserDto("joey@example.com", "pass"));
 
         mockMvc.perform(
             get("/users/" + user.getId())
@@ -140,15 +143,12 @@ public class UserControllerIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andDo(print())
-            .andExpect(jsonPath("$.distance").value(1500))
-            .andExpect(jsonPath("$.duration").value(25 * 60));
+            .andExpect(jsonPath("$.id").value(user.getId()))
+            .andExpect(jsonPath("$.email").value("joey@example.com"));
     }
 
     @Test
     public void testUserNonExistent() throws Exception {
-
-        final User user = userRepository.findByEmail(EMAIL);
-
         mockMvc.perform(
             get("/users/999")
                 .with(user(EMAIL).roles(ROLE))
@@ -160,7 +160,7 @@ public class UserControllerIT {
 
     @Test
     public void testCreateUserNoSession() throws Exception {
-        UserDto user = new UserDto("e", "p");
+        UserDto user = new UserDto("joey@example.com", "pass");
 
         mockMvc.perform(
             post("/users")
@@ -171,7 +171,7 @@ public class UserControllerIT {
 
     @Test
     public void testCreateUserInvalid() throws Exception {
-        UserDto user = new UserDto("e", "p");
+        UserDto user = new UserDto("joey@examplecom", "pass");
 
         mockMvc.perform(
             post("/users")
@@ -188,7 +188,7 @@ public class UserControllerIT {
 
     @Test
     public void testCreateUserValid() throws Exception {
-        UserDto user = new UserDto("e", "p");
+        UserDto user = new UserDto("john@example.com", "password");
 
         mockMvc.perform(
             post("/users")
@@ -206,8 +206,7 @@ public class UserControllerIT {
 
     @Test
     public void testUpdateUserNonExisting() throws Exception {
-
-        UserDto user = new UserDto("e", "p");
+        UserDto user = new UserDto("alice@example.com", "password");
 
         mockMvc.perform(
             put("/users")
@@ -223,7 +222,9 @@ public class UserControllerIT {
     @Test
     public void testUpdateUserExisting() throws Exception {
 
-        User user = new User();
+        final User user = userService.create(new UserDto("daniel@example.com", "password"));
+
+        final UserDto userDto = new UserDto(user.getId(), "david@example.com", "password");
 
         mockMvc.perform(
             put("/users")
@@ -231,40 +232,40 @@ public class UserControllerIT {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(TestUtils.convertObjectToJsonBytes(user))
+                .content(TestUtils.convertObjectToJsonBytes(userDto))
         )
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-        //final User one = userRepository.findOne(savedUser.getId());
-        //assertThat(one.getDistance()).isEqualTo(Distance.ofMeters(999));
+        final User existing = userRepository.findOne(user.getId());
+        assertThat(existing.getEmail()).isEqualTo(userDto.getEmail());
     }
 
     @Test
     public void testDeleteNonExistingUser() throws Exception {
 
-        final User user = new User();
-        user.setEmail("other.email@example.com");
-        user.setPassword(passwordEncoder.encode("pass"));
-        final User savedUser = userRepository.save(user);
+        userService.create(new UserDto("alice@example.com", "password"));
 
         mockMvc.perform(
-            delete("/users/" + savedUser.getId())
+            delete("/users/444")
                 .with(user(EMAIL).roles(ROLE))
                 .with(csrf())
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
             .andExpect(status().isBadRequest());
 
+        assertThat(userRepository.findAll()).hasSize(1);
     }
 
     @Test
     public void testDeleteExisting() throws Exception {
 
-        final User save = userRepository.save(userRepository.findByEmail(EMAIL));
+        final User user = userService.create(new UserDto("alice@example.com", "password"));
+
+        assertThat(userRepository.findAll()).hasSize(1);
 
         mockMvc.perform(
-            delete("/users/" + save.getId())
+            delete("/users/" + user.getId())
                 .with(user(EMAIL).roles(ROLE))
                 .with(csrf())
                 .accept(MediaType.APPLICATION_JSON_UTF8)

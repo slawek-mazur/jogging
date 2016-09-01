@@ -1,5 +1,6 @@
 package io.stricte.jogging.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.common.collect.Sets;
 import lombok.Data;
@@ -33,6 +34,7 @@ public class User implements Serializable {
     @NotNull
     @Size(min = 10, max = 80)
     @Column(name = "password", length = 80)
+    @JsonIgnore
     private String password;
 
     @Size(max = 50)
