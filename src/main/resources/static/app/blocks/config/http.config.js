@@ -5,17 +5,14 @@
         .module('jogging')
         .config(httpConfig);
 
-    httpConfig.$inject = ['$urlRouterProvider', '$httpProvider', 'httpRequestInterceptorCacheBusterProvider', '$urlMatcherFactoryProvider'];
+    httpConfig.$inject = ['$urlRouterProvider', '$httpProvider', '$urlMatcherFactoryProvider'];
 
-    function httpConfig($urlRouterProvider, $httpProvider, httpRequestInterceptorCacheBusterProvider, $urlMatcherFactoryProvider) {
+    function httpConfig($urlRouterProvider, $httpProvider, $urlMatcherFactoryProvider) {
         
         //enable CSRF
         $httpProvider.defaults.xsrfCookieName = 'CSRF-TOKEN';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';
         
-        //Cache everything except rest api requests
-        httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/, /.*protected.*/], true);
-
         $urlRouterProvider.otherwise('/');
 
         $httpProvider.interceptors.push('errorHandlerInterceptor');

@@ -7,7 +7,6 @@
             'ngResource',
             'ngCookies',
             'ngAria',
-            'ngCacheBuster',
             'ngFileUpload',
             'ui.bootstrap',
             'ui.bootstrap.datetimepicker',
