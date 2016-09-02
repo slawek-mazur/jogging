@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -7,7 +7,7 @@
 
     LoginController.$inject = ['$rootScope', '$state', '$timeout', 'Auth', '$uibModalInstance'];
 
-    function LoginController ($rootScope, $state, $timeout, Auth, $uibModalInstance) {
+    function LoginController($rootScope, $state, $timeout, Auth, $uibModalInstance) {
         var vm = this;
 
         vm.authenticationError = false;
@@ -17,14 +17,15 @@
         vm.password = null;
         vm.register = register;
         vm.rememberMe = true;
-        vm.requestResetPassword = requestResetPassword;
-        vm.username = null;
+        vm.email = null;
 
-        $timeout(function (){angular.element('#username').focus();});
+        $timeout(function () {
+            angular.element('#email').focus();
+        });
 
-        function cancel () {
+        function cancel() {
             vm.credentials = {
-                username: null,
+                email: null,
                 password: null,
                 rememberMe: true
             };
@@ -32,10 +33,10 @@
             $uibModalInstance.dismiss('cancel');
         }
 
-        function login (event) {
+        function login(event) {
             event.preventDefault();
             Auth.login({
-                username: vm.username,
+                email: vm.email,
                 password: vm.password,
                 rememberMe: vm.rememberMe
             }).then(function () {
@@ -49,7 +50,7 @@
                 $rootScope.$broadcast('authenticationSuccess');
 
                 // previousState was set in the authExpiredInterceptor before being redirected to login modal.
-                // since login is succesful, go to stored previousState and clear previousState
+                // since login is successful, go to stored previousState and clear previousState
                 if (Auth.getPreviousState()) {
                     var previousState = Auth.getPreviousState();
                     Auth.resetPreviousState();
@@ -60,14 +61,9 @@
             });
         }
 
-        function register () {
+        function register() {
             $uibModalInstance.dismiss('cancel');
             $state.go('register');
-        }
-
-        function requestResetPassword () {
-            $uibModalInstance.dismiss('cancel');
-            $state.go('requestReset');
         }
     }
 })();
