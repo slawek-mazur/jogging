@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -7,14 +7,12 @@
 
     errorHandlerInterceptor.$inject = ['$q', '$rootScope'];
 
-    function errorHandlerInterceptor ($q, $rootScope) {
-        var service = {
+    function errorHandlerInterceptor($q, $rootScope) {
+        return {
             responseError: responseError
         };
 
-        return service;
-
-        function responseError (response) {
+        function responseError(response) {
             if (!(response.status === 401 && (response.data === '' || (response.data.path && response.data.path.indexOf('/api/account') === 0 )))) {
                 $rootScope.$emit('jogging.httpError', response);
             }

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -7,17 +7,15 @@
 
     notificationInterceptor.$inject = ['$q', 'AlertService'];
 
-    function notificationInterceptor ($q, AlertService) {
-        var service = {
+    function notificationInterceptor($q, AlertService) {
+        return {
             response: response
         };
 
-        return service;
-
-        function response (response) {
+        function response(response) {
             var alertKey = response.headers('X-jogging-alert');
             if (angular.isString(alertKey)) {
-                AlertService.success(alertKey, { param : response.headers('X-jogging-params')});
+                AlertService.success(alertKey, {param: response.headers('X-jogging-params')});
             }
             return response;
         }
