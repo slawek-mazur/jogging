@@ -14,7 +14,11 @@
             <div ui-view="navbar" ng-cloak></div>
         </div>
 
-        <div ng-view="content" class="container"></div>
+        <div class="container">
+            <div class="well" ui-view="content">
+                <!-- Angular views -->
+            </div>
+        </div>
 
         <footer>
             <div class="container">
@@ -102,7 +106,6 @@
         <script src="app/blocks/config/compile.config.js"></script>
         <script src="app/blocks/config/alert.config.js"></script>
         <script src="app/app.state.js"></script>
-        <script src="app/app.constants.js"></script>
         <script src="app/admin/user-management/user-management-dialog.controller.js"></script>
         <script src="app/admin/user-management/user-management-detail.controller.js"></script>
         <script src="app/admin/user-management/user-management-delete-dialog.controller.js"></script>
