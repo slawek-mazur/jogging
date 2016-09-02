@@ -7,7 +7,7 @@
 
     Register.$inject = ['$resource'];
 
-    function Register ($resource) {
-        return $resource('api/register', {}, {});
+    function Register($resource) {
+        return $resource('account/register', {}, {});
     }
 })();

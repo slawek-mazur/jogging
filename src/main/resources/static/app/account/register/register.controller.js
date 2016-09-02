@@ -23,8 +23,6 @@
         });
 
         function register() {
-
-            vm.registerAccount.langKey = 'en';
             vm.doNotMatch = null;
             vm.error = null;
             vm.errorUserExists = null;
