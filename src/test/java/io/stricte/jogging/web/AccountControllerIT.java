@@ -18,8 +18,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -65,6 +68,27 @@ public class AccountControllerIT {
             .andExpect(status().is4xxClientError());
 
         assertThat(userRepository.findAll()).isEmpty();
+    }
+
+    @Test
+    public void testAccountInfo() throws Exception {
+        mockMvc.perform(
+            get("/account/info")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+            .andExpect(status().is5xxServerError());
+    }
+
+    @Test
+    public void testAccountInfoAsLogged() throws Exception {
+        mockMvc.perform(
+            get("/account/info")
+                .with(user("joe@example.com").roles("ADMIN"))
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andExpect(jsonPath("$.email").value("joe@example.com"));
     }
 
     @Test
