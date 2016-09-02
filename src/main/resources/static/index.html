@@ -8,8 +8,11 @@
         <link href="assets/common/css/main.css" rel="stylesheet"/>
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans">
     </head>
-    <body ng-app="jogging">
-        <div ui-view="navbar" ng-cloak></div>
+    <body ng-app="jogging" ng-strict-di>
+
+        <div class="container">
+            <div ui-view="navbar" ng-cloak></div>
+        </div>
 
         <div ng-view="content" class="container"></div>
 
@@ -23,7 +26,7 @@
                 </div>
             </div>
         </footer>
-        
+
         <script src="assets/lib/angular/angular.min.js" type="text/javascript"></script>
         <script src="assets/lib/angular-aria/angular-aria.min.js" type="text/javascript"></script>
         <script src="assets/lib/angular-bootstrap/ui-bootstrap.min.js" type="text/javascript"></script>
@@ -38,11 +41,12 @@
         <script src="assets/lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
         <script src="assets/lib/json3/lib/json3.min.js" type="text/javascript"></script>
         <script src="assets/lib/messageformat/messageformat.js" type="text/javascript"></script>
+        <script src="assets/lib/ng-file-upload/ng-file-upload.js"></script>
+        <script src="assets/lib/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
 
         <script src="app/app.module.js"></script>
         <script src="app/services/user/user.service.js"></script>
         <script src="app/services/profiles/profile.service.js"></script>
-        <script src="app/services/profiles/page-ribbon.directive.js"></script>
         <script src="app/services/auth/sessions.service.js"></script>
         <script src="app/services/auth/register.service.js"></script>
         <script src="app/services/auth/principal.service.js"></script>
@@ -98,6 +102,7 @@
         <script src="app/blocks/config/compile.config.js"></script>
         <script src="app/blocks/config/alert.config.js"></script>
         <script src="app/app.state.js"></script>
+        <script src="app/app.constants.js"></script>
         <script src="app/admin/user-management/user-management-dialog.controller.js"></script>
         <script src="app/admin/user-management/user-management-detail.controller.js"></script>
         <script src="app/admin/user-management/user-management-delete-dialog.controller.js"></script>
@@ -142,8 +147,5 @@
         <script src="app/account/activate/activate.state.js"></script>
         <script src="app/account/activate/activate.controller.js"></script>
         <script src="app/account/account.state.js"></script>
-
-        <script src="app/app.module.js"></script>
-        <script src="app/app.state.js"></script>
     </body>
 </html>
