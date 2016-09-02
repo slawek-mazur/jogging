@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .controller('RunDetailController', RunDetailController);
 
     RunDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Run'];
@@ -13,7 +13,7 @@
         vm.run = entity;
         vm.previousState = previousState.name;
 
-        var unsubscribe = $rootScope.$on('myJoggingApp:runUpdate', function(event, result) {
+        var unsubscribe = $rootScope.$on('jogging:runUpdate', function(event, result) {
             vm.run = result;
         });
         $scope.$on('$destroy', unsubscribe);

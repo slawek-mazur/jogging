@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .config(stateConfig);
 
     stateConfig.$inject = ['$stateProvider'];

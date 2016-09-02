@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .filter('characters', characters);
         
     function characters () {

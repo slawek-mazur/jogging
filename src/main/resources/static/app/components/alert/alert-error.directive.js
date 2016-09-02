@@ -11,7 +11,7 @@
     };
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .component('jhiAlertError', jhiAlertError);
 
     jhiAlertErrorController.$inject = ['$scope', 'AlertService', '$rootScope'];
@@ -36,7 +36,7 @@
             );
         }
 
-        var cleanHttpErrorListener = $rootScope.$on('myJoggingApp.httpError', function (event, httpResponse) {
+        var cleanHttpErrorListener = $rootScope.$on('jogging.httpError', function (event, httpResponse) {
             var i;
             event.stopPropagation();
             switch (httpResponse.status) {
@@ -46,8 +46,8 @@
                 break;
 
             case 400:
-                var errorHeader = httpResponse.headers('X-myJoggingApp-error');
-                var entityKey = httpResponse.headers('X-myJoggingApp-params');
+                var errorHeader = httpResponse.headers('X-jogging-error');
+                var entityKey = httpResponse.headers('X-jogging-params');
                 if (errorHeader) {
                     var entityName = entityKey;
                     addErrorAlert(errorHeader, errorHeader, {entityName: entityName});

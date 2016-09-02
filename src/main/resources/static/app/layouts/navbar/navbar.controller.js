@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .controller('NavbarController', NavbarController);
 
     NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService'];

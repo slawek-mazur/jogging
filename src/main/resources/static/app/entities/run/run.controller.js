@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .controller('RunController', RunController);
 
     RunController.$inject = ['$scope', '$state', 'Run', 'ParseLinks', 'AlertService', 'pagingParams', 'paginationConstants'];

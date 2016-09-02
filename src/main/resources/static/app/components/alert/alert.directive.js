@@ -11,7 +11,7 @@
     };
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .component('jhiAlert', jhiAlert);
 
     jhiAlertController.$inject = ['$scope', 'AlertService'];

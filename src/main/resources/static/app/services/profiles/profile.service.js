@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .factory('ProfileService', ProfileService);
 
     ProfileService.$inject = ['$q', '$http'];

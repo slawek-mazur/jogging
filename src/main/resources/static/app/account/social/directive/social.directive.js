@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .directive('jhSocial', jhSocial);
 
     jhSocial.$inject = ['$filter', 'SocialService'];

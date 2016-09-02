@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .factory('Principal', Principal);
 
     Principal.$inject = ['$q', 'Account'];

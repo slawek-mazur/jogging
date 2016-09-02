@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .directive('hasAuthority', hasAuthority);
 
     hasAuthority.$inject = ['Principal'];

@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .directive('passwordStrengthBar', passwordStrengthBar);
 
     function passwordStrengthBar () {

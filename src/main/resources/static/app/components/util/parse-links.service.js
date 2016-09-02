@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .factory('ParseLinks', ParseLinks);
 
     function ParseLinks () {

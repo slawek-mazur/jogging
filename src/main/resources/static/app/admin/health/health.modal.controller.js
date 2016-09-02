@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('myJoggingApp')
+    angular.module('jogging')
         .controller('HealthModalController', HealthModalController);
 
     HealthModalController.$inject = ['$uibModalInstance', 'currentHealth', 'baseName', 'subSystemName'];

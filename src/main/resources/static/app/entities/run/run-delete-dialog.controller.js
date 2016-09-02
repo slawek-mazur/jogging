@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .controller('RunDeleteController',RunDeleteController);
 
     RunDeleteController.$inject = ['$uibModalInstance', 'entity', 'Run'];

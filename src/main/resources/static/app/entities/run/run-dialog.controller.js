@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .controller('RunDialogController', RunDialogController);
 
     RunDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Run'];
@@ -34,7 +34,7 @@
         }
 
         function onSaveSuccess (result) {
-            $scope.$emit('myJoggingApp:runUpdate', result);
+            $scope.$emit('jogging:runUpdate', result);
             $uibModalInstance.close(result);
             vm.isSaving = false;
         }

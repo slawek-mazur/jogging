@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .factory('SocialService', SocialService);
 
     SocialService.$inject = ['$document'];

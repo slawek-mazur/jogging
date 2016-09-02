@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .config(stateConfig);
 
     stateConfig.$inject = ['$stateProvider'];
@@ -47,7 +47,7 @@
             url: '/user/:login',
             data: {
                 authorities: ['ROLE_ADMIN'],
-                pageTitle: 'myJoggingApp'
+                pageTitle: 'jogging'
             },
             views: {
                 'content@': {

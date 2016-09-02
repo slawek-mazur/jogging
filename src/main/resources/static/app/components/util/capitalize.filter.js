@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .filter('capitalize', capitalize);
 
     function capitalize() {

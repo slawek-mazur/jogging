@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .factory('Run', Run);
 
     Run.$inject = ['$resource', 'DateUtils'];

@@ -15,6 +15,6 @@
     };
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .component('jhiItemCount', jhiItemCount);
 })();

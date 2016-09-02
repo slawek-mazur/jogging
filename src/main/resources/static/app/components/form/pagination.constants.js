@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('myJoggingApp')
+        .module('jogging')
         .constant('paginationConstants', {
             'itemsPerPage': 20
         });
