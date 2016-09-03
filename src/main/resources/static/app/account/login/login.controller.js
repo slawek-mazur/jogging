@@ -16,7 +16,6 @@
         vm.login = login;
         vm.password = null;
         vm.register = register;
-        vm.rememberMe = true;
         vm.email = null;
 
         $timeout(function () {
@@ -26,8 +25,7 @@
         function cancel() {
             vm.credentials = {
                 email: null,
-                password: null,
-                rememberMe: true
+                password: null
             };
             vm.authenticationError = false;
         }
@@ -36,8 +34,7 @@
             event.preventDefault();
             Auth.login({
                 email: vm.email,
-                password: vm.password,
-                rememberMe: vm.rememberMe
+                password: vm.password
             }).then(function () {
                 vm.authenticationError = false;
                 if ($state.current.name === 'register' || $state.current.name === 'activate' ||

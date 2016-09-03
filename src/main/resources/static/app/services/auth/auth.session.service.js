@@ -1,38 +1,35 @@
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('jogging')
         .factory('AuthServerProvider', AuthServerProvider);
 
-    AuthServerProvider.$inject = ['$http', '$localStorage' ];
+    AuthServerProvider.$inject = ['$http', '$localStorage'];
 
-    function AuthServerProvider ($http, $localStorage ) {
-        var service = {
+    function AuthServerProvider($http, $localStorage) {
+        return {
             getToken: getToken,
             hasValidToken: hasValidToken,
             login: login,
             logout: logout
         };
 
-        return service;
-
-        function getToken () {
-            var token = $localStorage.authenticationToken;
-            return token;
+        function getToken() {
+            return $localStorage.authenticationToken;
         }
 
-        function hasValidToken () {
+        function hasValidToken() {
             var token = this.getToken();
             return !!token;
         }
 
-        function login (credentials) {
-            var data = 'j_username=' + encodeURIComponent(credentials.username) +
-                '&j_password=' + encodeURIComponent(credentials.password) +
-                '&remember-me=' + credentials.rememberMe + '&submit=Login';
+        function login(credentials) {
+            var data =
+                'username=' + encodeURIComponent(credentials.email) + '&' +
+                'password=' + encodeURIComponent(credentials.password);
 
-            return $http.post('api/authentication', data, {
+            return $http.post('account/authentication', data, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
@@ -41,17 +38,13 @@
             });
         }
 
-        function logout () {
-
-            
-            // logout from the server
+        function logout() {
             $http.post('api/logout').success(function (response) {
                 delete $localStorage.authenticationToken;
-                // to get a new csrf token call the api
                 $http.get('api/account');
                 return response;
             });
-            
+
         }
     }
 })();
