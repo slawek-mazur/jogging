@@ -39,9 +39,9 @@
         }
 
         function logout() {
-            $http.post('api/logout').success(function (response) {
+            $http.post('account/logout').success(function (response) {
                 delete $localStorage.authenticationToken;
-                $http.get('api/account');
+                $http.get('account/info');
                 return response;
             });
 
