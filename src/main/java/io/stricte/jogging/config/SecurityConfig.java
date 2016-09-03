@@ -1,6 +1,8 @@
 package io.stricte.jogging.config;
 
 import io.stricte.jogging.config.security.CsrfHeaderFilter;
+import io.stricte.jogging.config.security.LoginFailureHandler;
+import io.stricte.jogging.config.security.LoginSuccessHandler;
 import io.stricte.jogging.config.security.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 
 import java.util.List;
@@ -53,6 +56,15 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
         @Autowired
         DefaultWebSecurityExpressionHandler expressionHandler;
 
+        @Autowired
+        LoginSuccessHandler loginSuccessHandler;
+
+        @Autowired
+        LoginFailureHandler loginFailureHandler;
+
+        @Autowired
+        LogoutSuccessHandler logoutSuccessHandler;
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
@@ -61,16 +73,15 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
                 .and()
                     .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .formLogin()
-                    //todo chyba processing URL
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/index")
-                    .failureUrl("/login?error")
+                    .loginProcessingUrl("/account/authentication")
+                    .successHandler(loginSuccessHandler)
+                    .failureHandler(loginFailureHandler)
                     .permitAll()
                 .and()
                     .logout()
-                        .logoutSuccessUrl("/login?logout")
-                        .logoutUrl("/logout")
-                        .deleteCookies("JSESSIONID")
+                        .logoutUrl("/account/logout")
+                        .logoutSuccessHandler(logoutSuccessHandler)
+                        .deleteCookies("JSESSIONID", "XSRF-TOKEN")
                         .permitAll()
                 .and()
                     .authorizeRequests()
