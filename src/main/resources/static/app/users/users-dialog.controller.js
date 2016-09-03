@@ -5,14 +5,13 @@
         .module('jogging')
         .controller('UserManagementDialogController', UserManagementDialogController);
 
-    UserManagementDialogController.$inject = ['$stateParams', '$uibModalInstance', 'entity', 'User'];
+    UserManagementDialogController.$inject = ['$uibModalInstance', 'entity', 'User'];
 
-    function UserManagementDialogController($stateParams, $uibModalInstance, entity, User) {
+    function UserManagementDialogController($uibModalInstance, entity, User) {
         var vm = this;
 
         vm.authorities = ['ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN'];
         vm.clear = clear;
-        vm.languages = null;
         vm.save = save;
         vm.user = entity;
 
