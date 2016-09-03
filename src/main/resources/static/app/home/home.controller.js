@@ -5,14 +5,14 @@
         .module('jogging')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state'];
+    HomeController.$inject = ['$scope', 'Principal', '$state'];
 
-    function HomeController($scope, Principal, LoginService, $state) {
+    function HomeController($scope, Principal, $state) {
         var vm = this;
 
         vm.account = null;
         vm.isAuthenticated = null;
-        vm.login = LoginService.open;
+        vm.login = login;
         vm.register = register;
         $scope.$on('authenticationSuccess', function () {
             getAccount();
@@ -25,6 +25,10 @@
                 vm.account = account;
                 vm.isAuthenticated = Principal.isAuthenticated;
             });
+        }
+
+        function login() {
+            $state.go('login');
         }
 
         function register() {

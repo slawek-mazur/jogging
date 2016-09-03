@@ -5,9 +5,9 @@
         .module('jogging')
         .controller('NavbarController', NavbarController);
 
-    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'LoginService'];
+    NavbarController.$inject = ['$state', 'Auth', 'Principal'];
 
-    function NavbarController($state, Auth, Principal, LoginService) {
+    function NavbarController($state, Auth, Principal) {
         var vm = this;
 
         vm.isNavbarCollapsed = true;
@@ -20,8 +20,8 @@
         vm.$state = $state;
 
         function login() {
-            collapseNavbar();
-            LoginService.open();
+            //collapseNavbar();
+            //LoginService.open();
         }
 
         function logout() {

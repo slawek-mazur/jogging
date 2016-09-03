@@ -5,7 +5,7 @@
         .module('jogging')
         .controller('RegisterController', RegisterController);
 
-    RegisterController.$inject = ['$timeout', 'Auth', 'LoginService'];
+    RegisterController.$inject = ['$timeout', 'Auth'];
 
     function RegisterController($timeout, Auth, LoginService) {
         var vm = this;
@@ -13,7 +13,9 @@
         vm.doNotMatch = null;
         vm.error = null;
         vm.errorUserExists = null;
-        vm.login = LoginService.open;
+        vm.login = function () {
+            alert('o ho 2');
+        };
         vm.register = register;
         vm.registerAccount = {};
         vm.success = null;

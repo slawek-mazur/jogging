@@ -5,9 +5,9 @@
         .module('jogging')
         .controller('ActivationController', ActivationController);
 
-    ActivationController.$inject = ['$stateParams', 'Auth', 'LoginService'];
+    ActivationController.$inject = ['$stateParams', 'Auth'];
 
-    function ActivationController ($stateParams, Auth, LoginService) {
+    function ActivationController ($stateParams, Auth) {
         var vm = this;
 
         Auth.activateAccount({key: $stateParams.key}).then(function () {
@@ -18,6 +18,8 @@
             vm.error = 'ERROR';
         });
 
-        vm.login = LoginService.open;
+        vm.login = function () {
+            alert('o ho 3');
+        };
     }
 })();
