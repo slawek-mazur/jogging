@@ -5,6 +5,8 @@ import io.stricte.jogging.web.rest.model.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.security.Principal;
+
 public interface UserService {
 
     User register(UserDto userDto);
@@ -22,4 +24,6 @@ public interface UserService {
     void update(UserDto userDto);
 
     void delete(int id);
+
+    UserDto from(Principal principal);
 }

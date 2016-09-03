@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -106,5 +108,13 @@ class UserServiceImpl implements UserService {
     @Override
     public void delete(int id) {
         userRepository.delete(id);
+    }
+
+    @Override
+    public UserDto from(Principal principal) {
+        UsernamePasswordAuthenticationToken token =
+            (UsernamePasswordAuthenticationToken) principal;
+
+        return asDto(userRepository.findByEmail(token.getName()));
     }
 }
