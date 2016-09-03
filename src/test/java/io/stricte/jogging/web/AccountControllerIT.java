@@ -4,7 +4,6 @@ import io.stricte.jogging.repository.UserRepository;
 import io.stricte.jogging.service.UserService;
 import io.stricte.jogging.util.TestUtils;
 import io.stricte.jogging.web.rest.model.UserDto;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,15 +40,12 @@ public class AccountControllerIT {
 
     @Before
     public void setup() {
+        userRepository.deleteAll();
+
         mockMvc = MockMvcBuilders
             .webAppContextSetup(this.wac)
             .apply(springSecurity())
             .build();
-    }
-
-    @After
-    public void cleanup() {
-        userRepository.deleteAll();
     }
 
     @Test
@@ -120,7 +116,7 @@ public class AccountControllerIT {
         )
             .andExpect(status().isCreated())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(redirectedUrl("/users/1"));
+            .andExpect(redirectedUrlPattern("/users/*"));
 
         assertThat(userRepository.findAll()).hasSize(1);
     }

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.Collections;
 
 @Data
 @NoArgsConstructor
@@ -20,9 +22,7 @@ public class UserDto {
 
     private String password;
 
-    public UserDto(String email) {
-        this.email = email;
-    }
+    private Collection<String> authorities = Collections.emptySet();
 
     public UserDto(String email, String password) {
         this.email = email;

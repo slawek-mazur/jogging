@@ -6,6 +6,7 @@ import io.stricte.jogging.web.rest.model.UserDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/account")
@@ -31,12 +33,22 @@ public class AccountController {
     @RequestMapping(value = "/info", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDto> info(Principal principal) {
         return Optional.ofNullable(principal)
-            .map(p -> ResponseEntity.ok(new UserDto(principal.getName())))
+            .map(p -> {
+                UsernamePasswordAuthenticationToken token =
+                    (UsernamePasswordAuthenticationToken) principal;
+
+                final UserDto user = new UserDto();
+                user.setEmail(token.getName());
+                user.setAuthorities(token.getAuthorities().stream().map(Object::toString).collect(Collectors.toSet()));
+
+                return ResponseEntity.ok(user);
+            })
             .orElseGet(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null));
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> register(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) throws URISyntaxException {
+    public ResponseEntity<?> register(@Valid @RequestBody UserDto userDto, BindingResult bindingResult)
+        throws URISyntaxException {
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();

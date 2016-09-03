@@ -9,11 +9,9 @@
                     ut fermentum massa justo sit amet risus.
                 </p>
                 <div ng-switch="vm.isAuthenticated()">
-                    <div class="alert alert-warning" ng-switch-when="false">
-                        <p>
-                            <a role="button" href="" ng-click="vm.login()" class="btn btn-lg btn-success">Sign up today</a>
-                        </p>
-                    </div>
+                    <p ng-switch-when="false">
+                        <a role="button" href="" ng-click="vm.login()" class="btn btn-lg btn-success">Sign up today</a>
+                    </p>
                 </div>
             </div>
         </div>
