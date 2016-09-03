@@ -17,6 +17,6 @@ public class DurationSerializer extends JsonSerializer<Duration> {
     public void serialize(Duration o, JsonGenerator generator, SerializerProvider provider)
         throws IOException {
 
-        generator.writeNumber(o.getSeconds());
+        generator.writeString(o.toMinutes() + "." + o.getSeconds());
     }
 }

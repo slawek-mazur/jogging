@@ -17,6 +17,10 @@ public class DurationDeserializer extends JsonDeserializer<Duration> {
     public Duration deserialize(JsonParser jp, DeserializationContext ctx)
         throws IOException {
 
-        return Duration.ofSeconds(jp.getLongValue());
+        final long minutesAndSeconds = (long) (jp.getDoubleValue() * 100);
+
+        final double secondsFromMinutes = (minutesAndSeconds / 100) * 60 + (minutesAndSeconds % 100);
+
+        return Duration.ofSeconds((long) secondsFromMinutes);
     }
 }
