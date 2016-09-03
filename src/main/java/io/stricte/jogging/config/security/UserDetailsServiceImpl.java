@@ -27,16 +27,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User " + username + " doesn't exists or isn't active");
         }
 
-        /*
-        if (!user.isActive()) {
-            throw new DisabledException("User " + user.getDisplayName() + " isn't active");
-        }
-
-        return SimpleSocialUserDetails.builder(userId)
-            .name(user.getDisplayName())
-            .role(user.getRole())
-            .build();
-            */
-        return null;
+        return new SimpleUserDetails(user.getEmail(), user.getPassword(), user.getRole());
     }
 }

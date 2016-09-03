@@ -3,6 +3,7 @@ package io.stricte.jogging.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.common.collect.Sets;
+import io.stricte.jogging.config.security.Role;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,7 +18,7 @@ import java.util.Set;
 @Data
 @Entity
 @EqualsAndHashCode(of = "email")
-@ToString(of = { "email", "firstName", "lastName" })
+@ToString(of = { "email" })
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,17 +38,7 @@ public class User implements Serializable {
     @JsonIgnore
     private String password;
 
-    @Size(max = 50)
-    @Column(name = "first_name", length = 50)
-    private String firstName;
-
-    @Size(max = 50)
-    @Column(name = "last_name", length = 50)
-    private String lastName;
-
-    @NotNull
-    @Column(nullable = false)
-    private boolean activated = false;
+    private String role = Role.USER;
 
     @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JsonManagedReference
