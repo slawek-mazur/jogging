@@ -47,7 +47,9 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
     void configureGlobal(AuthenticationManagerBuilder auth, UserDetailsService userDetailsService)
         throws Exception {
 
-        auth.userDetailsService(userDetailsService);
+        auth
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder());
     }
 
     @EnableWebSecurity

@@ -22,17 +22,17 @@ public class JoggingApplication {
         return strings -> {
 
             final User user = new User();
-            user.setEmail("joe@example.org");
+            user.setEmail("joe@example.com");
             user.setPassword(encoder.encode("joe_pass"));
             user.setRole(Role.USER);
 
             final User manager = new User();
-            manager.setEmail("jack@example.org");
+            manager.setEmail("jack@example.com");
             manager.setPassword(encoder.encode("jack_pass"));
             manager.setRole(Role.MANAGER);
 
             final User admin = new User();
-            admin.setEmail("jill@example.org");
+            admin.setEmail("jill@example.com");
             admin.setPassword(encoder.encode("jill_pass"));
             admin.setRole(Role.ADMIN);
 
