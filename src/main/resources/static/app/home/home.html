@@ -8,7 +8,13 @@
                     Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
                     ut fermentum massa justo sit amet risus.
                 </p>
-                <p><a role="button" href="#" class="btn btn-lg btn-success">Sign up today</a></p>
+                <div ng-switch="vm.isAuthenticated()">
+                    <div class="alert alert-warning" ng-switch-when="false">
+                        <p>
+                            <a role="button" href="" ng-click="vm.login()" class="btn btn-lg btn-success">Sign up today</a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
