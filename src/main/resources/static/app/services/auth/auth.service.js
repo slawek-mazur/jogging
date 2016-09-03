@@ -5,42 +5,22 @@
         .module('jogging')
         .factory('Auth', Auth);
 
-    Auth.$inject = ['$rootScope', '$state', '$sessionStorage', '$q', 'Principal', 'AuthServerProvider', 'Account', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'];
+    Auth.$inject = ['$rootScope', '$state', '$sessionStorage', '$q', 'Principal', 'AuthServerProvider', 'Account', 'Register'];
 
-    function Auth($rootScope, $state, $sessionStorage, $q, Principal, AuthServerProvider, Account, Register, Activate, Password, PasswordResetInit, PasswordResetFinish) {
-        var service = {
-            activateAccount: activateAccount,
+    function Auth($rootScope, $state, $sessionStorage, $q, Principal, AuthServerProvider, Account, Register) {
+        return {
             authorize: authorize,
-            changePassword: changePassword,
             createAccount: createAccount,
             getPreviousState: getPreviousState,
             login: login,
             logout: logout,
-            resetPasswordFinish: resetPasswordFinish,
-            resetPasswordInit: resetPasswordInit,
             resetPreviousState: resetPreviousState,
             storePreviousState: storePreviousState,
             updateAccount: updateAccount
         };
 
-        return service;
-
-        function activateAccount(key, callback) {
-            var cb = callback || angular.noop;
-
-            return Activate.get(key,
-                function (response) {
-                    return cb(response);
-                },
-                function (err) {
-                    return cb(err);
-                }.bind(this)).$promise;
-        }
-
         function authorize(force) {
-            var authReturn = Principal.identity(force).then(authThen);
-
-            return authReturn;
+            return Principal.identity(force).then(authThen);
 
             function authThen() {
                 var isAuthenticated = Principal.isAuthenticated();
@@ -74,16 +54,6 @@
                     }
                 }
             }
-        }
-
-        function changePassword(newPassword, callback) {
-            var cb = callback || angular.noop;
-
-            return Password.save(newPassword, function () {
-                return cb();
-            }, function (err) {
-                return cb(err);
-            }).$promise;
         }
 
         function createAccount(account, callback) {
@@ -127,26 +97,6 @@
             Principal.authenticate(null);
         }
 
-        function resetPasswordFinish(keyAndPassword, callback) {
-            var cb = callback || angular.noop;
-
-            return PasswordResetFinish.save(keyAndPassword, function () {
-                return cb();
-            }, function (err) {
-                return cb(err);
-            }).$promise;
-        }
-
-        function resetPasswordInit(mail, callback) {
-            var cb = callback || angular.noop;
-
-            return PasswordResetInit.save(mail, function () {
-                return cb();
-            }, function (err) {
-                return cb(err);
-            }).$promise;
-        }
-
         function updateAccount(account, callback) {
             var cb = callback || angular.noop;
 
@@ -160,8 +110,7 @@
         }
 
         function getPreviousState() {
-            var previousState = $sessionStorage.previousState;
-            return previousState;
+            return $sessionStorage.previousState;
         }
 
         function resetPreviousState() {
