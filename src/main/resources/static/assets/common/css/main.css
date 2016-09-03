@@ -27,6 +27,8 @@ body {
     line-height: 40px;
 }
 
+.table > thead > tr > th { border: none; }
+
 footer {
     position: absolute;
     bottom: 20px;

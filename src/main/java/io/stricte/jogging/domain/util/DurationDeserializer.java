@@ -17,10 +17,11 @@ public class DurationDeserializer extends JsonDeserializer<Duration> {
     public Duration deserialize(JsonParser jp, DeserializationContext ctx)
         throws IOException {
 
-        final long minutesAndSeconds = (long) (jp.getDoubleValue() * 100);
+        final String[] minutesAndSeconds = jp.getText().split("\\.");
 
-        final double secondsFromMinutes = (minutesAndSeconds / 100) * 60 + (minutesAndSeconds % 100);
+        final int minutesAsSeconds = Integer.parseInt(minutesAndSeconds[0]) * 60;
+        final int secondsAsSeconds = Integer.parseInt(minutesAndSeconds[1]) * 10;
 
-        return Duration.ofSeconds((long) secondsFromMinutes);
+        return Duration.ofSeconds(minutesAsSeconds + secondsAsSeconds);
     }
 }

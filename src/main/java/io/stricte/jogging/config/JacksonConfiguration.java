@@ -1,6 +1,7 @@
 package io.stricte.jogging.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.stricte.jogging.domain.Distance;
 import io.stricte.jogging.domain.util.DistanceDeserializer;
 import io.stricte.jogging.domain.util.DistanceSerializer;
@@ -31,6 +32,8 @@ public class JacksonConfiguration {
 
     @Bean
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
+        builder.serializers(new LocalDateTimeSerializer(ISO_FIXED_FORMAT));
+
         builder.serializerByType(Distance.class, DistanceSerializer.INSTANCE);
         builder.deserializerByType(Distance.class, DistanceDeserializer.INSTANCE);
 

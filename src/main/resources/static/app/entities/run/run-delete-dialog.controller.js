@@ -1,9 +1,9 @@
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('jogging')
-        .controller('RunDeleteController',RunDeleteController);
+        .controller('RunDeleteController', RunDeleteController);
 
     RunDeleteController.$inject = ['$uibModalInstance', 'entity', 'Run'];
 
@@ -13,12 +13,12 @@
         vm.run = entity;
         vm.clear = clear;
         vm.confirmDelete = confirmDelete;
-        
-        function clear () {
+
+        function clear() {
             $uibModalInstance.dismiss('cancel');
         }
 
-        function confirmDelete (id) {
+        function confirmDelete(id) {
             Run.delete({id: id},
                 function () {
                     $uibModalInstance.close(true);

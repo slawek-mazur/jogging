@@ -1,7 +1,7 @@
 <div>
     <h2>
         Runs
-        <button class="btn btn-primary" ui-sref="run.new">
+        <button class="btn" ui-sref="run.new">
             <span class="glyphicon glyphicon-plus"></span>
             <span>New</span>
         </button>
@@ -12,7 +12,6 @@
         <table class="jh-table table table-striped">
             <thead>
                 <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="day"><span>Day</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="distance"><span>Distance (in meters)</span>
                         <span class="glyphicon glyphicon-sort"></span></th>
@@ -25,29 +24,28 @@
             </thead>
             <tbody>
                 <tr ng-repeat="run in vm.runs track by run.id">
-                    <td><a ui-sref="run-detail({id:run.id})">{{run.id}}</a></td>
                     <td>{{run.day | date:'medium'}}</td>
                     <td>{{run.distance}}</td>
                     <td>{{run.duration}}</td>
-                    <td>{{run.averageSpeed}} meters/minutes</td>
+                    <td>{{run.averageSpeed}} meters/minute</td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
                                     ui-sref="run-detail({id:run.id})"
-                                    class="btn btn-info btn-sm">
-                                <span class="glyphicon glyphicon-eye-open"></span>
+                                    class="btn btn-sm">
+                                <span class="glyphicon glyphicon-search"></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
                             <button type="submit"
                                     ui-sref="run.edit({id:run.id})"
-                                    class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span>
+                                    class="btn btn-sm">
+                                <span class="glyphicon glyphicon-edit"></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
                             <button type="submit"
                                     ui-sref="run.delete({id:run.id})"
-                                    class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                    class="btn btn-sm">
+                                <span class="glyphicon glyphicon glyphicon-trash"></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
                         </div>

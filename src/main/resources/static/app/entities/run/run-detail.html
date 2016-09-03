@@ -1,4 +1,3 @@
-
 <div>
     <h2><span>Run</span> {{vm.run.id}}</h2>
     <hr>
@@ -10,22 +9,18 @@
         </dd>
         <dt><span>Distance</span></dt>
         <dd>
-            <span>{{vm.run.distance}}</span>
+            <span>{{vm.run.distance}} meters</span>
         </dd>
-        <dt><span>Time</span></dt>
+        <dt><span>Duration</span></dt>
         <dd>
-            <span>{{vm.run.time}}</span>
+            <span>{{vm.run.duration}} minutes</span>
+        </dd>
+        <dt><span>Average Speed</span></dt>
+        <dd>
+            <span>{{vm.run.averageSpeed}} meters/minute</span>
         </dd>
     </dl>
-
-    <button type="submit"
-            ui-sref="{{ vm.previousState }}"
-            class="btn btn-info">
+    <button type="submit" ui-sref="{{ vm.previousState }}" class="btn">
         <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
-    </button>
-
-    <button type="button" ui-sref="run-detail.edit({id:vm.run.id})" class="btn btn-primary">
-        <span class="glyphicon glyphicon-pencil"></span>
-        <span class="hidden-xs hidden-sm"> Edit</span>
     </button>
 </div>
