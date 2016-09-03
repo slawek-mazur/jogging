@@ -45,7 +45,7 @@
             })
             .state('users-detail', {
                 parent: 'admin',
-                url: '/user/:login',
+                url: '/user/{id}',
                 data: {
                     authorities: ['ROLE_ADMIN'],
                     pageTitle: 'jogging'

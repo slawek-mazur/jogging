@@ -13,16 +13,10 @@
         vm.isNavbarCollapsed = true;
         vm.isAuthenticated = Principal.isAuthenticated;
 
-        vm.login = login;
         vm.logout = logout;
         vm.toggleNavbar = toggleNavbar;
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
-
-        function login() {
-            //collapseNavbar();
-            //LoginService.open();
-        }
 
         function logout() {
             collapseNavbar();

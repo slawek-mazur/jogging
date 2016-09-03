@@ -6,6 +6,7 @@ import io.stricte.jogging.web.rest.model.UserDto;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
@@ -21,10 +22,13 @@ public class UserServiceImplTest {
 
     private UserRepository userRepository;
 
+    private RoleHierarchy roleHierarchy;
+
     @Before
     public void setup() throws Exception {
         userRepository = mock(UserRepository.class);
-        userService = spy(new UserServiceImpl(userRepository, passwordEncoder));
+        roleHierarchy = mock(RoleHierarchy.class);
+        userService = spy(new UserServiceImpl(userRepository, passwordEncoder, roleHierarchy));
     }
 
     @After

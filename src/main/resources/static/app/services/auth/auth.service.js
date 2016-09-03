@@ -48,9 +48,7 @@
                         storePreviousState($rootScope.toState.name, $rootScope.toStateParams);
 
                         // now, send them to the signin state so they can log in
-                        $state.go('accessdenied').then(function () {
-                            LoginService.open();
-                        });
+                        $state.go('accessdenied');
                     }
                 }
             }

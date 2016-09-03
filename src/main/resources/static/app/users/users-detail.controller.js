@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -7,16 +7,16 @@
 
     UserManagementDetailController.$inject = ['$stateParams', 'User'];
 
-    function UserManagementDetailController ($stateParams, User) {
+    function UserManagementDetailController($stateParams, User) {
         var vm = this;
 
         vm.load = load;
         vm.user = {};
 
-        vm.load($stateParams.login);
+        vm.load($stateParams.id);
 
-        function load (login) {
-            User.get({login: login}, function(result) {
+        function load(id) {
+            User.get({id: id}, function (result) {
                 vm.user = result;
             });
         }

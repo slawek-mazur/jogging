@@ -27,7 +27,13 @@ body {
     line-height: 40px;
 }
 
-.table > thead > tr > th { border: none; }
+.table > thead > tr > th {
+    border: none;
+}
+
+.table tr td span.label.label-info {
+    margin: 2px;
+}
 
 footer {
     position: absolute;

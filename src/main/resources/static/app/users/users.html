@@ -19,14 +19,12 @@
                 <tr ng-repeat="user in vm.users track by user.id">
                     <td>{{user.email}}</td>
                     <td>
-                        <div ng-repeat="authority in user.authorities">
-                            <span class="label label-info">{{ authority }}</span>
-                        </div>
+                        <span ng-repeat="authority in user.authorities" class="label label-info">{{ authority }}</span>
                     </td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
-                                    ui-sref="users-detail({login:user.login})"
+                                    ui-sref="users-detail({id:user.id})"
                                     class="btn btn-sm">
                                 <span class="glyphicon glyphicon-search"></span>
                                 <span class="hidden-xs hidden-sm"></span>

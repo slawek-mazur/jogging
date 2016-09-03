@@ -15,9 +15,9 @@ public interface UserService {
 
     User create(UserDto userDto);
 
-    Page<User> all(Pageable pageable);
+    Page<UserDto> all(Pageable pageable);
 
-    User one(int id);
+    UserDto one(int id);
 
     void update(UserDto userDto);
 

@@ -7,7 +7,7 @@
 
     RegisterController.$inject = ['$timeout', 'Auth'];
 
-    function RegisterController($timeout, Auth, LoginService) {
+    function RegisterController($timeout, Auth) {
         var vm = this;
 
         vm.doNotMatch = null;

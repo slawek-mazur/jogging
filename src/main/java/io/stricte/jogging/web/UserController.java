@@ -39,17 +39,17 @@ class UserController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Collection<User>> getUsers(Pageable pageable)
+    public ResponseEntity<Collection<UserDto>> getUsers(Pageable pageable)
         throws URISyntaxException {
 
-        Page<User> page = userService.all(pageable);
+        Page<UserDto> page = userService.all(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> getUser(@PathVariable int id) {
-        final User user = userService.one(id);
+        final UserDto user = userService.one(id);
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
