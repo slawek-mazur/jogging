@@ -1,18 +1,12 @@
 <div>
-    <h2>Runs</h2>
+    <h2>
+        Runs
+        <button class="btn btn-primary" ui-sref="run.new">
+            <span class="glyphicon glyphicon-plus"></span>
+            <span>New</span>
+        </button>
+    </h2>
     <jhi-alert></jhi-alert>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="run.new" >
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span >
-                        Create new Run
-                    </span>
-                </button>
-            </div>
-        </div>
-    </div>
     <br/>
     <div class="table-responsive">
         <table class="jh-table table table-striped">
@@ -20,8 +14,12 @@
                 <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
                     <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="day"><span>Day</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="distance"><span>Distance</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="time"><span>Time</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="distance"><span>Distance (in meters)</span>
+                        <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="duration"><span>Duration (in minutes)</span>
+                        <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="averageSpeed"><span>Average Speed</span>
+                        <span class="glyphicon glyphicon-sort"></span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -30,7 +28,8 @@
                     <td><a ui-sref="run-detail({id:run.id})">{{run.id}}</a></td>
                     <td>{{run.day | date:'medium'}}</td>
                     <td>{{run.distance}}</td>
-                    <td>{{run.time}}</td>
+                    <td>{{run.duration}}</td>
+                    <td>{{run.averageSpeed}} meters/minutes</td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"

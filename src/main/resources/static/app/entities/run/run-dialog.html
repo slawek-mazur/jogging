@@ -1,6 +1,4 @@
-
 <form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
-
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="vm.clear()">&times;</button>
@@ -11,69 +9,68 @@
         <div class="form-group" ng-show="vm.run.id">
             <label for="id">ID</label>
             <input type="text" class="form-control" id="id" name="id"
-                    ng-model="vm.run.id" readonly />
+                   ng-model="vm.run.id" readonly/>
         </div>
         <div class="form-group">
             <label class="control-label" for="field_day">Day</label>
-                <div class="input-group">
-                    <input id="field_day" type="text" class="form-control" name="day" datetime-picker="{{dateformat}}" ng-model="vm.run.day" is-open="vm.datePickerOpenStatus.day"
-                    required  />
-                    <span class="input-group-btn">
+            <div class="input-group">
+                <input id="field_day" type="text" class="form-control" name="day" datetime-picker="{{dateformat}}" ng-model="vm.run.day" is-open="vm.datePickerOpenStatus.day"
+                       required/>
+                <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('day')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
-                </div>
+            </div>
             <div ng-show="editForm.day.$invalid">
                 <p class="help-block"
-                    ng-show="editForm.day.$error.required">
+                   ng-show="editForm.day.$error.required">
                     This field is required.
                 </p>
                 <p class="help-block"
-                    ng-show="editForm.day.$error.ZonedDateTimelocal">
+                   ng-show="editForm.day.$error.ZonedDateTimelocal">
                     This field should be a date and time.
                 </p>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label" for="field_distance">Distance</label>
+            <label class="control-label" for="field_distance">Distance (in meters)</label>
             <input type="number" class="form-control" name="distance" id="field_distance"
-                    ng-model="vm.run.distance"
-                    required min="1" />
+                   ng-model="vm.run.distance"
+                   required min="1"/>
             <div ng-show="editForm.distance.$invalid">
                 <p class="help-block"
-                    ng-show="editForm.distance.$error.required">
+                   ng-show="editForm.distance.$error.required">
                     This field is required.
                 </p>
                 <p class="help-block"
-                    ng-show="editForm.distance.$error.min" translate-value-min="1">
+                   ng-show="editForm.distance.$error.min" translate-value-min="1">
                     This field should be more than 1.
                 </p>
                 <p class="help-block"
-                    ng-show="editForm.distance.$error.number">
+                   ng-show="editForm.distance.$error.number">
                     This field should be a number.
                 </p>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label" for="field_time">Time</label>
-            <input type="number" class="form-control" name="time" id="field_time"
-                    ng-model="vm.run.time"
-                    required min="1" />
-            <div ng-show="editForm.time.$invalid">
+            <label class="control-label" for="field_duration">Duration (in minutes)</label>
+            <input type="number" class="form-control" name="duration" id="field_duration"
+                   ng-model="vm.run.duration"
+                   required min="1"/>
+            <div ng-show="editForm.duration.$invalid">
                 <p class="help-block"
-                    ng-show="editForm.time.$error.required">
+                   ng-show="editForm.duration.$error.required">
                     This field is required.
                 </p>
                 <p class="help-block"
-                    ng-show="editForm.time.$error.min" translate-value-min="1">
+                   ng-show="editForm.duration.$error.min" translate-value-min="1">
                     This field should be more than 1.
                 </p>
                 <p class="help-block"
-                    ng-show="editForm.time.$error.number">
+                   ng-show="editForm.duration.$error.number">
                     This field should be a number.
                 </p>
             </div>
         </div>
-
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
