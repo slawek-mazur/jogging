@@ -1,15 +1,13 @@
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('jogging')
         .factory('stateHandler', stateHandler);
 
-    stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage',  '$window',
-        'Auth', 'Principal'];
+    stateHandler.$inject = ['$rootScope', '$window', 'Auth', 'Principal'];
 
-    function stateHandler($rootScope, $state, $sessionStorage,  $window,
-        Auth, Principal) {
+    function stateHandler($rootScope, $window, Auth, Principal) {
         return {
             initialize: initialize
         };
@@ -30,11 +28,11 @@
                     Auth.authorize();
                 }
 
-                
+
             });
 
-            var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
-                var titleKey = 'jogging' ;
+            var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+                var titleKey = 'jogging';
 
                 // Set the page title key to the one configured in state or use default one
                 if (toState.data.pageTitle) {
@@ -44,10 +42,10 @@
             });
 
             $rootScope.$on('$destroy', function () {
-                if(angular.isDefined(stateChangeStart) && stateChangeStart !== null){
+                if (angular.isDefined(stateChangeStart) && stateChangeStart !== null) {
                     stateChangeStart();
                 }
-                if(angular.isDefined(stateChangeSuccess) && stateChangeSuccess !== null){
+                if (angular.isDefined(stateChangeSuccess) && stateChangeSuccess !== null) {
                     stateChangeSuccess();
                 }
             });

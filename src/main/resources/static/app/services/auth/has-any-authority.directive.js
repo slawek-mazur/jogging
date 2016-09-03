@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -8,12 +8,10 @@
     hasAnyAuthority.$inject = ['Principal'];
 
     function hasAnyAuthority(Principal) {
-        var directive = {
+        return {
             restrict: 'A',
             link: linkFunc
         };
-
-        return directive;
 
         function linkFunc(scope, element, attrs) {
             var authorities = attrs.hasAnyAuthority.replace(/\s+/g, '').split(',');
@@ -41,9 +39,9 @@
             if (authorities.length > 0) {
                 defineVisibility(true);
 
-                scope.$watch(function() {
+                scope.$watch(function () {
                     return Principal.isAuthenticated();
-                }, function() {
+                }, function () {
                     defineVisibility(true);
                 });
             }

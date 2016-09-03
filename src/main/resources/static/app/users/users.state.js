@@ -13,7 +13,7 @@
                 parent: 'admin',
                 url: '/users?page&sort',
                 data: {
-                    authorities: ['ROLE_ADMIN'],
+                    authorities: ['ROLE_MANAGER'],
                     pageTitle: 'Users'
                 },
                 views: {
@@ -47,7 +47,7 @@
                 parent: 'admin',
                 url: '/user/{id}',
                 data: {
-                    authorities: ['ROLE_ADMIN'],
+                    authorities: ['ROLE_MANAGER'],
                     pageTitle: 'jogging'
                 },
                 views: {
@@ -62,7 +62,7 @@
                 parent: 'users',
                 url: '/new',
                 data: {
-                    authorities: ['ROLE_ADMIN']
+                    authorities: ['ROLE_MANAGER']
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
@@ -90,9 +90,9 @@
             })
             .state('users.edit', {
                 parent: 'users',
-                url: '/{login}/edit',
+                url: '/{id}/edit',
                 data: {
-                    authorities: ['ROLE_ADMIN']
+                    authorities: ['ROLE_MANAGER']
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
@@ -103,7 +103,7 @@
                         size: 'lg',
                         resolve: {
                             entity: ['User', function (User) {
-                                return User.get({login: $stateParams.login});
+                                return User.get({id: $stateParams.id});
                             }]
                         }
                     }).result.then(function () {
@@ -115,9 +115,9 @@
             })
             .state('users.delete', {
                 parent: 'users',
-                url: '/{login}/delete',
+                url: '/{id}/delete',
                 data: {
-                    authorities: ['ROLE_ADMIN']
+                    authorities: ['ROLE_MANAGER']
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
@@ -127,7 +127,7 @@
                         size: 'md',
                         resolve: {
                             entity: ['User', function (User) {
-                                return User.get({login: $stateParams.login});
+                                return User.get({id: $stateParams.id});
                             }]
                         }
                     }).result.then(function () {

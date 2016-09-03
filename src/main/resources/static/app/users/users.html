@@ -30,13 +30,13 @@
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
                             <button type="submit"
-                                    ui-sref="users.edit({login:user.login})"
+                                    ui-sref="users.edit({id:user.id})"
                                     class="btn btn-sm">
                                 <span class="glyphicon glyphicon-edit"></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
                             <button type="submit"
-                                    ui-sref="users.delete({login:user.login})"
+                                    ui-sref="users.delete({id:user.id})"
                                     class="btn btn-sm" ng-disabled="vm.currentAccount.email==user.email">
                                 <span class="glyphicon glyphicon-trash"></span>
                                 <span class="hidden-xs hidden-sm"></span>
