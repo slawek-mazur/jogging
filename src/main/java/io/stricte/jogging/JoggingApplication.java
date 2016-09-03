@@ -23,17 +23,17 @@ public class JoggingApplication {
 
             final User user = new User();
             user.setEmail("joe@example.com");
-            user.setPassword(encoder.encode("joe_pass"));
+            user.setPassword(encoder.encode("joes_pass"));
             user.setRole(Role.USER);
 
             final User manager = new User();
             manager.setEmail("jack@example.com");
-            manager.setPassword(encoder.encode("jack_pass"));
+            manager.setPassword(encoder.encode("jacks_pass"));
             manager.setRole(Role.MANAGER);
 
             final User admin = new User();
             admin.setEmail("jill@example.com");
-            admin.setPassword(encoder.encode("jill_pass"));
+            admin.setPassword(encoder.encode("jills_pass"));
             admin.setRole(Role.ADMIN);
 
             userRepository.save(Sets.newHashSet(user, manager, admin));
