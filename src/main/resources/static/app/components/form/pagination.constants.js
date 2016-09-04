@@ -1,9 +1,9 @@
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('jogging')
         .constant('paginationConstants', {
-            'itemsPerPage': 20
+            'itemsPerPage': 10
         });
 })();
