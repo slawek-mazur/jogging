@@ -8,7 +8,7 @@
     localStorageConfig.$inject = ['$localStorageProvider', '$sessionStorageProvider'];
 
     function localStorageConfig($localStorageProvider, $sessionStorageProvider) {
-        $localStorageProvider.setKeyPrefix('jhi-');
-        $sessionStorageProvider.setKeyPrefix('jhi-');
+        $localStorageProvider.setKeyPrefix('jogging-');
+        $sessionStorageProvider.setKeyPrefix('jogging-');
     }
 })();
