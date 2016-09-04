@@ -9,25 +9,21 @@
     <alert></alert>
     <br/>
     <div class="table-responsive">
-        <table class="jh-table table table-striped">
-            <thead>
-                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="day"><span>Day</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="distance"><span>Distance (in meters)</span>
-                        <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="duration"><span>Duration (in minutes)</span>
-                        <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="averageSpeed"><span>Average Speed</span>
-                        <span class="glyphicon glyphicon-sort"></span></th>
-                    <th></th>
-                </tr>
-            </thead>
+        <table ng-table="vm.tableParams" show-filter="true" class="table table-striped">
             <tbody>
-                <tr ng-repeat="run in vm.runs track by run.id">
-                    <td>{{run.day | date:'medium'}}</td>
-                    <td>{{run.distance}}</td>
-                    <td>{{run.duration}}</td>
-                    <td>{{run.averageSpeed}} meters/minute</td>
+                <tr ng-repeat="run in $data track by run.id">
+                    <td data-title="'Day'" filter="{ day : 'date', templateURL: '/app/filters/date.html' }">
+                        {{run.day | date:'medium'}}
+                    </td>
+                    <td data-title="'Distance (in meters)'" filter="{ distance : 'number' }">
+                        {{run.distance}}
+                    </td>
+                    <td data-title="'Duration (in minutes)'" filter="{ duration : 'number' }">
+                        {{run.duration}}
+                    </td>
+                    <td data-title="'Average Speed'" filter="{ averageSpeed : 'number' }">
+                        {{run.averageSpeed}} meters/minute
+                    </td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
@@ -53,9 +49,5 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div class="text-center">
-        <item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></item-count>
-        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
 </div>

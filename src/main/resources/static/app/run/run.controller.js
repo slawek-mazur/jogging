@@ -1,29 +1,33 @@
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('jogging')
         .controller('RunController', RunController);
 
-    RunController.$inject = ['$scope', '$state', 'Run', 'ParseLinks', 'AlertService', 'pagingParams', 'paginationConstants'];
+    RunController.$inject = ['$state', 'Run', 'ParseLinks', 'AlertService', 'pagingParams',
+        'paginationConstants', 'NgTableParams'];
 
-    function RunController ($scope, $state, Run, ParseLinks, AlertService, pagingParams, paginationConstants) {
+    function RunController($state, Run, ParseLinks, AlertService, pagingParams,
+                           paginationConstants, NgTableParams) {
         var vm = this;
-        
-        vm.loadPage = loadPage;
+
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
-        vm.transition = transition;
-        vm.itemsPerPage = paginationConstants.itemsPerPage;
 
-        loadAll();
+        vm.tableParams = new NgTableParams(
+            {},
+            {
+                getData: loadAll
+            }
+        );
 
-        function loadAll () {
-            Run.query({
+        function loadAll(params) {
+            return Run.query({
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()
-            }, onSuccess, onError);
+            }, onSuccess, onError).$promise;
             function sort() {
                 var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
                 if (vm.predicate !== 'id') {
@@ -31,29 +35,19 @@
                 }
                 return result;
             }
+
             function onSuccess(data, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');
-                vm.queryCount = vm.totalItems;
-                vm.runs = data;
-                vm.page = pagingParams.page;
+                //vm.links = ParseLinks.parse(headers('link'));
+
+                params.total(headers('X-Total-Count'));
+                return data;
             }
+
             function onError(error) {
                 AlertService.error(error.data.message);
+                params.total(0);
+                return [];
             }
-        }
-
-        function loadPage (page) {
-            vm.page = page;
-            vm.transition();
-        }
-
-        function transition () {
-            $state.transitionTo($state.$current, {
-                page: vm.page,
-                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
-                search: vm.currentSearch
-            });
         }
     }
 })();

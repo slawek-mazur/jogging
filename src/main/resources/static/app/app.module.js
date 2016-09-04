@@ -7,6 +7,7 @@
             'ngResource',
             'ngCookies',
             'ngAria',
+            'ngTable',
             'ui.bootstrap',
             'ui.bootstrap.datetimepicker',
             'ui.router'
