@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -7,18 +7,16 @@
 
     DateUtils.$inject = ['$filter'];
 
-    function DateUtils ($filter) {
+    function DateUtils($filter) {
 
-        var service = {
-            convertDateTimeFromServer : convertDateTimeFromServer,
-            convertLocalDateFromServer : convertLocalDateFromServer,
-            convertLocalDateToServer : convertLocalDateToServer,
-            dateformat : dateformat
+        return {
+            convertDateTimeFromServer: convertDateTimeFromServer,
+            convertLocalDateFromServer: convertLocalDateFromServer,
+            convertLocalDateToServer: convertLocalDateToServer,
+            dateformat: dateformat
         };
 
-        return service;
-
-        function convertDateTimeFromServer (date) {
+        function convertDateTimeFromServer(date) {
             if (date) {
                 return new Date(date);
             } else {
@@ -26,7 +24,7 @@
             }
         }
 
-        function convertLocalDateFromServer (date) {
+        function convertLocalDateFromServer(date) {
             if (date) {
                 var dateString = date.split('-');
                 return new Date(dateString[0], dateString[1] - 1, dateString[2]);
@@ -34,7 +32,7 @@
             return null;
         }
 
-        function convertLocalDateToServer (date) {
+        function convertLocalDateToServer(date) {
             if (date) {
                 return $filter('date')(date, 'yyyy-MM-dd');
             } else {
@@ -42,7 +40,7 @@
             }
         }
 
-        function dateformat () {
+        function dateformat() {
             return 'yyyy-MM-dd';
         }
     }

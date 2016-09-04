@@ -17,7 +17,6 @@
 
             return {
                 factory: factory,
-                isToast: isToast,
                 add: addAlert,
                 closeAlert: closeAlert,
                 closeAlertByIndex: closeAlertByIndex,
