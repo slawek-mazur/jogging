@@ -11,8 +11,8 @@
     <script type="text/ng-template" id="filters/date.html">
         <div class="form-group">
             <div class="input-group">
-                <input id="field_from" type="text" class="form-control" name="from" datetime-picker="{{dateformat}}"
-                       ng-model="params.filter()[from]" is-open="vm.datePickerOpenStatus.from" required/>
+                <input id="field_from" type="text" class="form-control" name="{{name}}" datetime-picker="{{dateformat}}"
+                       ng-model="params.filter()[name]" is-open="vm.datePickerOpenStatus.from" required/>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-click="vm.openCalendar('from')"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
@@ -20,8 +20,8 @@
         </div>
         <div>
             <div class="input-group">
-                <input id="field_to" type="text" class="form-control" name="to" datetime-picker="{{dateformat}}"
-                       ng-model="params.filter()[to]" is-open="vm.datePickerOpenStatus.to" required/>
+                <input id="field_to" type="text" class="form-control" name="{{name}}" datetime-picker="{{dateformat}}"
+                       ng-model="params.filter()[name]" is-open="vm.datePickerOpenStatus.to" required/>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-click="vm.openCalendar('to')"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>

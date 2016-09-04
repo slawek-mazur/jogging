@@ -8,17 +8,13 @@
     </h2>
     <alert></alert>
     <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="email"><span>Email</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th><span>Authorities</span></th>
-                </tr>
-            </thead>
+        <table ng-table="vm.tableParams" show-filter="true" class="table table-striped">
             <tbody>
-                <tr ng-repeat="user in vm.users track by user.id">
-                    <td>{{user.email}}</td>
-                    <td>
+                <tr ng-repeat="user in $data track by user.id">
+                    <td data-title="'Email'">
+                        {{user.email}}
+                    </td>
+                    <td data-title="'Authorities'" >
                         <span ng-repeat="authority in user.authorities" class="label label-info">{{ authority }}</span>
                     </td>
                     <td class="text-right">
@@ -46,9 +42,5 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div class="text-center">
-        <item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></item-count>
-        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
 </div>
