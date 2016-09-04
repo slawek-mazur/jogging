@@ -1,24 +1,17 @@
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('jogging')
         .provider('AlertService', AlertService);
 
-    function AlertService () {
-        this.toast = false;
-        /*jshint validthis: true */
+    function AlertService() {
         this.$get = getService;
-
-        this.showAsToast = function(isToast) {
-            this.toast = isToast;
-        };
 
         getService.$inject = ['$timeout', '$sce'];
 
-        function getService ($timeout, $sce) {
-            var toast = this.toast,
-                alertId = 0, // unique id for each alert. Starts from 0.
+        function getService($timeout, $sce) {
+            var alertId = 0, // unique id for each alert. Starts from 0.
                 alerts = [],
                 timeout = 5000; // default timeout
 
@@ -33,12 +26,8 @@
                 success: success,
                 error: error,
                 info: info,
-                warning : warning
+                warning: warning
             };
-
-            function isToast() {
-                return toast;
-            }
 
             function clear() {
                 alerts = [];
@@ -54,7 +43,6 @@
                     msg: msg,
                     params: params,
                     timeout: timeout,
-                    toast: toast,
                     position: position
                 });
             }
@@ -65,7 +53,6 @@
                     msg: msg,
                     params: params,
                     timeout: timeout,
-                    toast: toast,
                     position: position
                 });
             }
@@ -76,7 +63,6 @@
                     msg: msg,
                     params: params,
                     timeout: timeout,
-                    toast: toast,
                     position: position
                 });
             }
@@ -87,7 +73,6 @@
                     msg: msg,
                     params: params,
                     timeout: timeout,
-                    toast: toast,
                     position: position
                 });
             }
@@ -98,14 +83,13 @@
                     msg: $sce.trustAsHtml(alertOptions.msg),
                     id: alertOptions.alertId,
                     timeout: alertOptions.timeout,
-                    toast: alertOptions.toast,
                     position: alertOptions.position ? alertOptions.position : 'top right',
                     scoped: alertOptions.scoped,
                     close: function (alerts) {
                         return closeAlert(this.id, alerts);
                     }
                 };
-                if(!alert.scoped) {
+                if (!alert.scoped) {
                     alerts.push(alert);
                 }
                 return alert;
@@ -125,7 +109,9 @@
 
             function closeAlert(id, extAlerts) {
                 var thisAlerts = extAlerts ? extAlerts : alerts;
-                return closeAlertByIndex(thisAlerts.map(function(e) { return e.id; }).indexOf(id), thisAlerts);
+                return closeAlertByIndex(thisAlerts.map(function (e) {
+                    return e.id;
+                }).indexOf(id), thisAlerts);
             }
 
             function closeAlertByIndex(index, thisAlerts) {
