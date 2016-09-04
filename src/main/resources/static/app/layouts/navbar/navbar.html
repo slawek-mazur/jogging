@@ -11,22 +11,15 @@
         </div>
         <div class="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
             <ul class="nav navbar-nav navbar-right">
-                <li ng-class="{active: vm.$state.includes('entity')}" ng-switch-when="true" has-authority="ROLE_USER"
-                    uib-dropdown class="dropdown pointer">
-                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="entity-menu">
-                        <span>
-                            <span class="hidden-sm">Entities</span>
-                            <b class="caret"></b>
-                        </span>
+                <li ng-class="{active: vm.$state.includes('entity')}" ng-switch-when="true" has-authority="ROLE_USER">
+                    <a ui-sref="run" ng-click="vm.collapseNavbar()">
+                        <span>Runs</span>
                     </a>
-                    <ul class="dropdown-menu" uib-dropdown-menu>
-                        <li ui-sref-active="active">
-                            <a ui-sref="run" ng-click="vm.collapseNavbar()">
-                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
-                                <span>Run</span>
-                            </a>
-                        </li>
-                    </ul>
+                </li>
+                <li ng-class="{active: vm.$state.includes('admin')}" ng-switch-when="true" has-authority="ROLE_MANAGER">
+                    <a ui-sref="users" ng-click="vm.collapseNavbar()">
+                        <span>Users</span>
+                    </a>
                 </li>
                 <li ng-class="{active: vm.$state.includes('account')}" uib-dropdown class="dropdown pointer">
                     <a class="dropdown-toggle" uib-dropdown-toggle href="" id="account-menu">
@@ -49,22 +42,6 @@
                         <li ui-sref-active="active" ng-switch-when="false">
                             <a ui-sref="register" ng-click="vm.collapseNavbar()">
                                 <span>Sign Up</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li ng-class="{active: vm.$state.includes('admin')}" ng-switch-when="true" has-authority="ROLE_MANAGER"
-                    uib-dropdown class="dropdown pointer">
-                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="admin-menu">
-                        <span>
-                            <span class="hidden-sm">Administration</span>
-                            <b class="caret"></b>
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu" uib-dropdown-menu>
-                        <li ui-sref-active="active">
-                            <a ui-sref="users" ng-click="vm.collapseNavbar()">
-                                <span>Users</span>
                             </a>
                         </li>
                     </ul>
