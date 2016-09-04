@@ -58,7 +58,7 @@ class RunServiceImpl implements RunService {
     private Specification<Run> dayMatches(LocalDateTime from, LocalDateTime to) {
         return (root, query, builder) -> {
             if (from != null && to != null) {
-                return builder.greaterThanOrEqualTo(root.get("day"), from);
+                return builder.between(root.get("day"), from, to);
             } else if (from == null && to == null) {
                 return null;
             } else if (from != null) {

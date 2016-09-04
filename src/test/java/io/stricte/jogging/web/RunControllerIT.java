@@ -204,7 +204,7 @@ public class RunControllerIT {
         mockMvc.perform(
             get("/runs?sort=day,desc")
                 .with(user(EMAIL).roles(ROLE))
-                .param("from", now.minusDays(4).format(JacksonConfiguration.ISO_DATE_OPTIONAL_TIME))
+                .param("from", now.minusDays(4).format(JacksonConfiguration.ISO_FIXED_FORMAT))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
@@ -217,7 +217,7 @@ public class RunControllerIT {
         mockMvc.perform(
             get("/runs?sort=day,desc")
                 .with(user("adminsEmail").roles("ADMIN"))
-                .param("from", now.minusDays(4).format(JacksonConfiguration.ISO_DATE_OPTIONAL_TIME))
+                .param("from", now.minusDays(4).format(JacksonConfiguration.ISO_FIXED_FORMAT))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )

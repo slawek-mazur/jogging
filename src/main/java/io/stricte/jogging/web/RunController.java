@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 
+import static io.stricte.jogging.config.JacksonConfiguration.ISO_FIXED_FORMAT;
 import static io.stricte.jogging.config.security.Role.USER;
 
 @Secured(USER)
@@ -42,8 +43,8 @@ class RunController {
         @RequestParam Optional<String> from, @RequestParam Optional<String> to)
         throws URISyntaxException {
 
-        final LocalDateTime fromDay = from.map(LocalDateTime::parse).orElse(null);
-        final LocalDateTime toDay = to.map(LocalDateTime::parse).orElse(null);
+        final LocalDateTime fromDay = from.map(date -> LocalDateTime.parse(date, ISO_FIXED_FORMAT)).orElse(null);
+        final LocalDateTime toDay = to.map(date -> LocalDateTime.parse(date, ISO_FIXED_FORMAT)).orElse(null);
 
         Page<Run> page = runService.all(pageable, fromDay, toDay);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/runs");

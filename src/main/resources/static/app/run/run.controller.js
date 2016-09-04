@@ -21,8 +21,8 @@
         vm.dateformat = dateformat;
 
         function loadAll(params) {
-            var from = params.filter().day ? DateUtils.convertDateTimeFromServer(params.filter().day.from) : 0;
-            var to = params.filter().day ? DateUtils.convertDateTimeFromServer(params.filter().day.to) : 0;
+            var from = params.filter().day ? DateUtils.convertDateTimeFromServer(params.filter().day.from) : null;
+            var to = params.filter().day ? DateUtils.convertDateTimeFromServer(params.filter().day.to) : null;
 
             return Run.query({
                 from: from,
