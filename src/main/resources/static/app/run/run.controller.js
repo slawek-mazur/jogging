@@ -5,9 +5,11 @@
         .module('jogging')
         .controller('RunController', RunController);
 
-    RunController.$inject = ['Run', 'AlertService', 'pagingParams', 'paginationConstants', 'NgTableParams'];
+    RunController.$inject = ['Run', 'AlertService', 'pagingParams', 'paginationConstants',
+        'NgTableParams', 'DateUtils'];
 
-    function RunController(Run, AlertService, pagingParams, paginationConstants, NgTableParams) {
+    function RunController(Run, AlertService, pagingParams, paginationConstants,
+                           NgTableParams, DateUtils) {
         var vm = this;
 
         vm.predicate = pagingParams.predicate;
@@ -19,10 +21,12 @@
         vm.dateformat = dateformat;
 
         function loadAll(params) {
-
-            console.log(params.filter());
+            var from = params.filter().day ? DateUtils.convertDateTimeFromServer(params.filter().day.from) : 0;
+            var to = params.filter().day ? DateUtils.convertDateTimeFromServer(params.filter().day.to) : 0;
 
             return Run.query({
+                from: from,
+                to: to,
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()
@@ -55,7 +59,7 @@
         }
 
         function dateformat() {
-            return 'yyyy-MM-dd';
+            return DateUtils.dateformat();
         }
     }
 })();

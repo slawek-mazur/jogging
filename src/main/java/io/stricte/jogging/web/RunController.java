@@ -14,15 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Optional;
 
 import static io.stricte.jogging.config.security.Role.USER;
 
@@ -39,10 +38,14 @@ class RunController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Collection<Run>> getRuns(Pageable pageable)
+    public ResponseEntity<Collection<Run>> getRuns(Pageable pageable,
+        @RequestParam Optional<String> from, @RequestParam Optional<String> to)
         throws URISyntaxException {
 
-        Page<Run> page = runService.all(pageable);
+        final LocalDateTime fromDay = from.map(LocalDateTime::parse).orElse(null);
+        final LocalDateTime toDay = to.map(LocalDateTime::parse).orElse(null);
+
+        Page<Run> page = runService.all(pageable, fromDay, toDay);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/runs");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

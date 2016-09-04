@@ -1,6 +1,7 @@
 package io.stricte.jogging.web;
 
 import com.google.common.collect.Sets;
+import io.stricte.jogging.config.JacksonConfiguration;
 import io.stricte.jogging.domain.Distance;
 import io.stricte.jogging.domain.Run;
 import io.stricte.jogging.domain.User;
@@ -173,6 +174,48 @@ public class RunControllerIT {
             .andExpect(jsonPath("$[0].duration").value(135 * 60))
             .andExpect(jsonPath("$[1].duration").value(75 * 60))
             .andExpect(jsonPath("$[2].duration").value(25 * 60));
+    }
+
+    @Test
+    public void testRunsExistsFilter() throws Exception {
+        final User user = userRepository.findByEmail(EMAIL);
+
+        final LocalDateTime now = LocalDateTime.now();
+
+        final Run run1 = new Run();
+        run1.setUser(user);
+        run1.setDistance(Distance.ofMeters(1500));
+        run1.setDuration(Duration.ofMinutes(25));
+        run1.setDay(now.minusDays(5));
+
+        final Run run2 = new Run();
+        run2.setUser(user);
+        run2.setDistance(Distance.ofMeters(2500));
+        run2.setDuration(Duration.ofMinutes(75));
+        run2.setDay(now.minusDays(3));
+
+        final Run run3 = new Run();
+        run3.setUser(user);
+        run3.setDistance(Distance.ofMeters(7500));
+        run3.setDuration(Duration.ofMinutes(135));
+        run3.setDay(now.minusDays(1));
+
+        runRepository.save(Sets.newHashSet(run1, run2, run3));
+
+        mockMvc.perform(
+            get("/runs?sort=day,desc")
+                .with(user(EMAIL).roles(ROLE))
+                .param("from", now.minusDays(4).format(JacksonConfiguration.ISO_DATE_OPTIONAL_TIME))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$.length()").value(3))
+            .andExpect(jsonPath("$[0].duration").value("135.00"))
+            .andExpect(jsonPath("$[1].duration").value("75.00"))
+            .andExpect(jsonPath("$[2].duration").value("25.00"));
     }
 
     @Test
