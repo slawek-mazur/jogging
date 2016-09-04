@@ -10,7 +10,7 @@
     function stateConfig($stateProvider) {
         $stateProvider
             .state('run', {
-                parent: 'entity',
+                parent: 'app',
                 url: '/run?page&sort&search',
                 data: {
                     authorities: ['ROLE_USER'],
@@ -18,7 +18,7 @@
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'app/entities/run/runs.html',
+                        templateUrl: 'app/run/runs.html',
                         controller: 'RunController',
                         controllerAs: 'vm'
                     }
@@ -47,7 +47,7 @@
                 }
             })
             .state('run-detail', {
-                parent: 'entity',
+                parent: 'run',
                 url: '/run/{id}',
                 data: {
                     authorities: ['ROLE_USER'],
@@ -55,7 +55,7 @@
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'app/entities/run/run-detail.html',
+                        templateUrl: 'app/run/run-detail.html',
                         controller: 'RunDetailController',
                         controllerAs: 'vm'
                     }
@@ -81,7 +81,7 @@
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/entities/run/run-dialog.html',
+                        templateUrl: 'app/run/run-dialog.html',
                         controller: 'RunDialogController',
                         controllerAs: 'vm',
                         backdrop: 'static',
@@ -106,7 +106,7 @@
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/entities/run/run-dialog.html',
+                        templateUrl: 'app/run/run-dialog.html',
                         controller: 'RunDialogController',
                         controllerAs: 'vm',
                         backdrop: 'static',
@@ -137,7 +137,7 @@
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/entities/run/run-dialog.html',
+                        templateUrl: 'app/run/run-dialog.html',
                         controller: 'RunDialogController',
                         controllerAs: 'vm',
                         backdrop: 'static',
@@ -162,7 +162,7 @@
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function ($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/entities/run/run-delete-dialog.html',
+                        templateUrl: 'app/run/run-delete-dialog.html',
                         controller: 'RunDeleteController',
                         controllerAs: 'vm',
                         size: 'md',
