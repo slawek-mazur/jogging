@@ -76,6 +76,9 @@ public class AccountControllerIT {
 
     @Test
     public void testAccountInfoAsLogged() throws Exception {
+
+        userService.register(new UserDto("joe@example.com", "some-good-random-pass"));
+
         mockMvc.perform(
             get("/account/info")
                 .with(user("joe@example.com").roles("ADMIN"))
