@@ -20,7 +20,7 @@ public class DurationDeserializer extends JsonDeserializer<Duration> {
         final String[] minutesAndSeconds = jp.getText().split("\\.");
 
         final int minutesAsSeconds = Integer.parseInt(minutesAndSeconds[0]) * 60;
-        final int secondsAsSeconds = Integer.parseInt(minutesAndSeconds[1]) * 10;
+        final int secondsAsSeconds = Integer.parseInt(minutesAndSeconds[1], 10);
 
         return Duration.ofSeconds(minutesAsSeconds + secondsAsSeconds);
     }

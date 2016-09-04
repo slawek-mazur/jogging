@@ -22,6 +22,6 @@ public class DurationSerializer extends JsonSerializer<Duration> {
         final long minutes = time / 60;
         final long seconds = time - (minutes * 60);
 
-        generator.writeString(minutes + "." + seconds);
+        generator.writeString(String.format("%d.%02d", minutes, seconds));
     }
 }
