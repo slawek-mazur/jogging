@@ -9,12 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+
+import static io.stricte.jogging.config.security.Role.ADMIN;
+import static org.springframework.data.jpa.domain.Specifications.where;
 
 @Service
 class RunServiceImpl implements RunService {
@@ -46,19 +51,31 @@ class RunServiceImpl implements RunService {
     }
 
     public Page<Run> all(Pageable pageable, LocalDateTime from, LocalDateTime to) {
-        return runRepository.findAllByCurrentUser(daySpecification(from, to), pageable);
+        //return runRepository.findAllByCurrentUser(pageable);
+        return runRepository.findAll(where(dayMatches(from, to)).and(belongsToUser()), pageable);
     }
 
-    private Specification<Run> daySpecification(LocalDateTime from, LocalDateTime to) {
+    private Specification<Run> dayMatches(LocalDateTime from, LocalDateTime to) {
         return (root, query, builder) -> {
             if (from != null && to != null) {
                 return builder.greaterThanOrEqualTo(root.get("day"), from);
             } else if (from == null && to == null) {
-                return builder.or();
+                return null;
             } else if (from != null) {
                 return builder.greaterThanOrEqualTo(root.get("day"), from);
             } else {
                 return builder.lessThanOrEqualTo(root.get("day"), to);
+            }
+        };
+    }
+
+    private Specification<Run> belongsToUser() {
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return (root, query, builder) -> {
+            if (auth.getAuthorities().contains(new SimpleGrantedAuthority(ADMIN))) {
+                return null;
+            } else {
+                return builder.equal(root.get("user").get("email"), auth.getName());
             }
         };
     }
