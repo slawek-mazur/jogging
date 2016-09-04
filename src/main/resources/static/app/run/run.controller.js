@@ -5,22 +5,14 @@
         .module('jogging')
         .controller('RunController', RunController);
 
-    RunController.$inject = ['$state', 'Run', 'ParseLinks', 'AlertService', 'pagingParams',
-        'paginationConstants', 'NgTableParams'];
+    RunController.$inject = ['Run', 'AlertService', 'paginationConstants', 'NgTableParams'];
 
-    function RunController($state, Run, ParseLinks, AlertService, pagingParams,
-                           paginationConstants, NgTableParams) {
+    function RunController(Run, AlertService, pagingParams, NgTableParams) {
         var vm = this;
 
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
-
-        vm.tableParams = new NgTableParams(
-            {},
-            {
-                getData: loadAll
-            }
-        );
+        vm.tableParams = new NgTableParams({}, {getData: loadAll});
 
         function loadAll(params) {
             return Run.query({
