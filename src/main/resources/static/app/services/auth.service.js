@@ -26,7 +26,9 @@
                 var isAuthenticated = Principal.isAuthenticated();
 
                 // an authenticated user can't access to login and register pages
-                if (isAuthenticated && $rootScope.toState.parent === 'account' && ($rootScope.toState.name === 'login' || $rootScope.toState.name === 'register')) {
+                if (isAuthenticated &&
+                    $rootScope.toState.parent === 'account' &&
+                    ($rootScope.toState.name === 'login' || $rootScope.toState.name === 'register')) {
                     $state.go('home');
                 }
 
@@ -37,7 +39,9 @@
                     $state.go(previousState.name, previousState.params);
                 }
 
-                if ($rootScope.toState.data.authorities && $rootScope.toState.data.authorities.length > 0 && !Principal.hasAnyAuthority($rootScope.toState.data.authorities)) {
+                if ($rootScope.toState.data.authorities &&
+                    $rootScope.toState.data.authorities.length > 0 && !Principal.hasAnyAuthority($rootScope.toState.data.authorities)) {
+
                     if (isAuthenticated) {
                         // user is signed in but not authorized for desired state
                         $state.go('accessdenied');
@@ -47,7 +51,7 @@
                         // send them to the login service, so you can return them when you're done
                         storePreviousState($rootScope.toState.name, $rootScope.toStateParams);
 
-                        // now, send them to the signin state so they can log in
+                        // now, send them to the sign in state so they can log in
                         $state.go('accessdenied');
                     }
                 }
@@ -80,7 +84,7 @@
                 }.bind(this));
 
             function loginThen(data) {
-                Principal.identity(true).then(function (account) {
+                Principal.identity(true).then(function () {
                     deferred.resolve(data);
                 });
                 return cb();
@@ -116,8 +120,7 @@
         }
 
         function storePreviousState(previousStateName, previousStateParams) {
-            var previousState = {"name": previousStateName, "params": previousStateParams};
-            $sessionStorage.previousState = previousState;
+            $sessionStorage.previousState = {"name": previousStateName, "params": previousStateParams};
         }
     }
 })();
